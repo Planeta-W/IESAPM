@@ -1,16 +1,16 @@
 {
   "name": "IESAPM",
   "host": "",
-  "protocol": "ftp",
-  "port": 21,
+  "protocol": "sftp",
+  "port": 22,
   "username": "",
   "password": "",
   "remotePath": "/public_html/site/wp-content/themes",
-  "context": "themes/iesapm",
-  "uploadOnSave": true,
+  "context": "themes",
+  "uploadOnSave": false,
   "watcher": {
     "files": "**/*.{css,css.map}",
-    "autoUpload": true,
+    "autoUpload": false,
     "autoDelete": false
   },
   "ignore": [
