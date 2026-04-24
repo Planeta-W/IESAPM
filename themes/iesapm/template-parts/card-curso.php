@@ -10,9 +10,8 @@ if ( get_field( 'verifica_link_externo' ) == '1' ) {
         $link_target = ' target="_blank" rel="noopener noreferrer"';
     }
 }
-echo '<!-- Link interno: ' . get_field( 'verifica_link_externo' ) . ' -->';
-echo '<!-- Link externo: ' . esc_url( $card_link ) . ' -->';
 ?>
+
 <div class="c-card-curso bg-primary h-100 rounded-4 overflow-auto">
     <div class="bg-primary h-100">
         <a href="<?php echo esc_url( $card_link ); ?>" class="text-decoration-none" title="<?php the_title_attribute(); ?>"<?php echo $link_target; ?>>
