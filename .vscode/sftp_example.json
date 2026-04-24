@@ -5,7 +5,7 @@
   "port": 22,
   "username": "",
   "password": "",
-  "remotePath": "/public_html/site/wp-content/themes",
+  "remotePath": "/home/iesapm1/public_html/site/wp-content/themes/",
   "context": "themes",
   "uploadOnSave": false,
   "watcher": {
