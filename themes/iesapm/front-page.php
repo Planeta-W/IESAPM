@@ -15,31 +15,28 @@
 
     <?php get_template_part('template-parts/banner-top'); ?>
 
+    <?php 
+    $args = array(
+        'post_type' => 'graduacao',
+        'posts_per_page' => 8,
+        'orderby' => 'title',
+        'order' => 'ASC'
+    );
+    $query_graduacao = new WP_Query($args);
+    
+    if ($query_graduacao->have_posts()):?>
     <section class="pad-featured pb-0">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Graduação</h2>
             <div class="owl-carousel owl-theme position-relative mt-4 js-carousel-cursos">
 
-                <?php
-                $args = array(
-                    'post_type' => 'graduacao',
-                    'posts_per_page' => 8,
-                    'orderby' => 'title',
-                    'order' => 'ASC'
-                );
-                query_posts($args);
+                <?php while ($query_graduacao->have_posts()) : $query_graduacao->the_post(); ?>
 
-                if (have_posts()): while (have_posts()) : the_post();
-                ?>
-
-                <article id="article-id-<?php the_id();?>" <?php post_class('item h-100'); ?>>
+                <article id="article-id-<?php the_ID();?>" <?php post_class('item h-100'); ?>>
                     <?php get_template_part('template-parts/card-curso'); ?>
                 </article>
 
-                <?php
-                endwhile;endif;
-                wp_reset_query();
-                ?>
+                <?php endwhile; ?>
 
             </div>
 
@@ -49,32 +46,33 @@
 
         </div>
     </section>
+    <?php
+    wp_reset_postdata();
+    endif;
+    ?>
 
+    <?php
+    $args = array(
+        'post_type' => 'pos-graduacao',
+        'posts_per_page' => 8,
+        'orderby' => 'title',
+        'order' => 'ASC'
+    );
+    $query_pos = new WP_Query($args);
+
+    if ($query_pos->have_posts()):?>
     <section class="pad-featured pb-0">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Pós-Graduação</h2>
             <div class="owl-carousel owl-theme position-relative mt-4 js-carousel-cursos">
 
-                <?php
-                $args = array(
-                    'post_type' => 'pos-graduacao',
-                    'posts_per_page' => 8,
-                    'orderby' => 'title',
-                    'order' => 'ASC'
-                );
-                query_posts($args);
+                <?php while ($query_pos->have_posts()) : $query_pos->the_post(); ?>
 
-                if (have_posts()): while (have_posts()) : the_post();
-                ?>
-
-                <article id="article-id-<?php the_id();?>" <?php post_class('item h-100'); ?>>
+                <article id="article-id-<?php the_ID();?>" <?php post_class('item h-100'); ?>>
                     <?php get_template_part('template-parts/card-curso'); ?>
                 </article>
 
-                <?php
-                endwhile;endif;
-                wp_reset_query();
-                ?>
+                <?php endwhile; ?>
 
             </div>
 
@@ -84,32 +82,33 @@
 
         </div>
     </section>
+    <?php
+    wp_reset_postdata();
+    endif;
+    ?>
 
+    <?php
+    $args = array(
+        'post_type' => 'extensao',
+        'posts_per_page' => 8,
+        'orderby' => 'title',
+        'order' => 'ASC'
+    );
+    $query_extensao = new WP_Query($args);
+
+    if ($query_extensao->have_posts()): ?>
     <section class="pad-featured">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Extensão</h2>
             <div class="owl-carousel owl-theme position-relative mt-4 js-carousel-cursos">
 
-                <?php
-                $args = array(
-                    'post_type' => 'extensao',
-                    'posts_per_page' => 8,
-                    'orderby' => 'title',
-                    'order' => 'ASC'
-                );
-                query_posts($args);
+                <?php while ($query_extensao->have_posts()) : $query_extensao->the_post(); ?>
 
-                if (have_posts()): while (have_posts()) : the_post();
-                ?>
-
-                <article id="article-id-<?php the_id();?>" <?php post_class('item h-100'); ?>>
+                <article id="article-id-<?php the_ID();?>" <?php post_class('item h-100'); ?>>
                     <?php get_template_part('template-parts/card-curso'); ?>
                 </article>
 
-                <?php
-                endwhile;endif;
-                wp_reset_query();
-                ?>
+                <?php endwhile; ?>
 
             </div>
 
@@ -119,6 +118,10 @@
 
         </div>
     </section>
+    <?php
+    wp_reset_postdata();
+    endif;
+    ?>
 
     <section class="pad-featured bg-light">
         <div class="container">
@@ -131,17 +134,18 @@
                     'post_type'      => 'post',
                     'posts_per_page' => 4,
                 );
-                query_posts($args);
+                $query_news = new WP_Query($args);
 
-                if (have_posts()):
-                while (have_posts()) : the_post(); ?>
+                if ($query_news->have_posts()):
+                while ($query_news->have_posts()) : $query_news->the_post(); ?>
 
-                <article id="article-id-<?php the_id();?>" <?php post_class('col-sm-6 col-xl-3 h-100'); ?>>
+                <article id="article-id-<?php the_ID();?>" <?php post_class('col-sm-6 col-xl-3 h-100'); ?>>
                     <?php // card post
                     get_template_part('template-parts/card-post'); ?>
                 </article>
 
-                <?php endwhile; endif; wp_reset_query(); ?>
+                <?php endwhile; wp_reset_postdata();
+                endif; ?>
 
             </div>
 

@@ -40,29 +40,30 @@
                             <?php the_content(); ?>
                         </div>
 
+                        <?php
+                        $coordenadores_posts = get_field('coordenador');
+                        if( $coordenadores_posts ): ?>
+
                         <div class="mt-5">
                             <h2 class="text-primary h5 mb-4">Coordenação</h2>
-
-                            <?php
-                            $coordenadores_posts = get_field('coordenador');
-                            if( $coordenadores_posts ): ?>
 
                             <div class="row g-3">
 
                                 <?php foreach( $coordenadores_posts as $post ): ?>
                                 <?php setup_postdata($post); ?>
 
-                                <article id="article-id-<?php the_id();?>" <?php post_class('col-sm-6 col-lg-4'); ?>>
+                                <article id="article-id-<?php the_ID();?>" <?php post_class('col-sm-6 col-lg-4'); ?>>
                                     <?php get_template_part('template-parts/card-corpo-docente'); ?>
                                 </article>
+                                
                                 <?php endforeach; ?>
+                                <?php wp_reset_postdata(); ?>
 
                             </div>
-                            <?php endif; ?>
-                            <?php
-                            wp_reset_postdata(); ?>
 
                         </div>
+
+                        <?php endif; ?>
 
                         <div class="mt-5">
                             <?php // compartilhe nas redes sociais

@@ -87,17 +87,18 @@ $id_post = get_the_id(); ?>
                                 'posts_per_page' => 2,
                                 'post__not_in'   => array($id_post),
                             );
-                            query_posts($args);
+                            $query_related = new WP_Query($args);
 
-                            if (have_posts()):
-                            while (have_posts()) : the_post(); ?>
+                            if ($query_related->have_posts()):
+                            while ($query_related->have_posts()) : $query_related->the_post(); ?>
 
-                            <article id="article-id-<?php the_id();?>" <?php post_class('col-sm-6 col-xl-12 h-100'); ?>>
+                            <article id="article-id-<?php the_ID();?>" <?php post_class('col-sm-6 col-xl-12 h-100'); ?>>
                                 <?php // card post
                                 get_template_part('template-parts/card-post'); ?>
                             </article>
 
-                            <?php endwhile; endif; wp_reset_query(); ?>
+                            <?php endwhile; wp_reset_postdata();
+                            endif; ?>
 
                         </div>
 
