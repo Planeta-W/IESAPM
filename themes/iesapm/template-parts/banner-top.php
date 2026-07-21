@@ -1,4 +1,4 @@
-<div id="js-banner-swiper" class="c-banner-swiper bg-primary position-relative overflow-hidden">
+<div id="js-banner-swiper" class="c-banner-swiper position-relative overflow-hidden">
 
     <div class="swiper">
         <div class="swiper-wrapper">
