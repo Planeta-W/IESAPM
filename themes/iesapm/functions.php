@@ -90,18 +90,4 @@ Pre_get_posts
 --------------------------------------------------------------*/
 include ('inc/pre_get_posts.php');
 
-
-/*--------------------------------------------------------------
-REGRA PARA SINGLE POR CATEGORIA (SINGLE-CATEGORY_ID.PHP)
---------------------------------------------------------------*/
-add_filter('single_template', function($the_template){
-		foreach( (array) get_the_category() as $cat ) {
-			if ( file_exists(TEMPLATEPATH . "/single-{$cat->term_id}.php") )
-				return TEMPLATEPATH . "/single-{$cat->term_id}.php";
-		}
-		return $the_template;
-	}
-);
-
-
 ?>
