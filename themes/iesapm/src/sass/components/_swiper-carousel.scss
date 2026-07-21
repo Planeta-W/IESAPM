@@ -1,0 +1,58 @@
+// swiper carousel theme
+
+.swiper-pagination{
+    @extend .d-flex, .justify-content-center, .mt-3;
+    position: relative;
+}
+
+.swiper-pagination-bullet{
+    @extend .mx-1;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border: 1px solid $secondary;
+    opacity: 1;
+    @extend .rounded-circle, .d-block, .transition;
+
+    &-active,
+    &:hover{
+        background-color: $secondary;
+    }
+}
+
+.swiper-button-prev,
+.swiper-button-next{
+    display: none;
+    position: absolute;
+    top: 32%;
+
+    &::after{
+        content: none;
+    }
+
+    .swiper-navigation-icon{
+        display: none;
+    }
+
+    span{
+        font-size: 4rem;
+        font-weight: 300;
+        color: $secondary;
+    }
+}
+
+.swiper-button-prev{
+    left: -44px;
+}
+
+.swiper-button-next{
+    right: -62px;
+}
+
+@include media-breakpoint-up(xl){
+
+    .swiper-button-prev,
+    .swiper-button-next{
+        display: block;
+    }
+}
