@@ -5,7 +5,7 @@ get_template_part('singles/single-curso');
 
 else :
 
-get_template_part('singles/single');
+get_template_part('singles/single-default');
 
 endif;
 ?>
