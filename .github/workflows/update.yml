@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+name: 🚀 Deploy do tema WordPress para o FTP (Produção)
+jobs:
+  web-deploy:
+    name: 🎉 Instalando OS
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Verificando dados do repositório
+      uses: actions/checkout@v4
+
+    - name: 📂 Usando action do FTP e fazendo upload de arquivos
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.host }}
+        username: ${{ secrets.user }}
+        password: ${{ secrets.pass }}
+        server-dir: public_html/site/wp-content/themes/
+        local-dir: ./themes/
