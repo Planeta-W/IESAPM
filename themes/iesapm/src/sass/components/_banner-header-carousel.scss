@@ -32,6 +32,10 @@
             content: none;
         }
 
+        .swiper-navigation-icon{
+            display: none;
+        }
+
         span{
             font-size: 4rem;
             font-weight: 300;
@@ -44,7 +48,7 @@
     }
 
     .swiper-button-next{
-        right: 0;
+        right: 10px;
     }
 
     @include media-breakpoint-up(xl){

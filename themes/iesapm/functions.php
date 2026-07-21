@@ -15,8 +15,8 @@ function enqueue_scripts() {
 
 	// SWIPER (banner do topo)
 	if ( is_front_page() ) {
-		wp_enqueue_style( 'swiper', 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.1.4/swiper-bundle.min.css', array(), '11.1.4' );
-		wp_enqueue_script( 'swiper', 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.1.4/swiper-bundle.min.js', array(), '11.1.4', true );
+		wp_enqueue_style( 'swiper', 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/14.0.5/swiper-bundle.min.css', array(), '14.0.5' );
+		wp_enqueue_script( 'swiper', 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/14.0.5/swiper-bundle.min.js', array(), '14.0.5', true );
 	}
 
 	// Lightbox2

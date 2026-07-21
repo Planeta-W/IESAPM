@@ -68,6 +68,6 @@ jQuery(document).ready(function ($) {
         },
     });
 
-    var body = $('body');
+
 });
 </script>
