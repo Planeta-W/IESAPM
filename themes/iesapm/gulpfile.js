@@ -19,7 +19,7 @@ function compileSass() {
         }))
 
         // destino
-        .pipe(gulp.dest('css'))
+        .pipe(gulp.dest('assets/css'))
 };
 
 function watchSass() {

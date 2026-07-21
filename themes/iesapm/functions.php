@@ -29,10 +29,10 @@ function enqueue_scripts() {
 	wp_enqueue_style( 'fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css', array(), '6.4.2' );
 
 	// THEME CSS
-	wp_enqueue_style( 'tema', get_template_directory_uri() . '/css/theme.min.css', array(), $tema_version );
+	wp_enqueue_style( 'tema', get_template_directory_uri() . '/assets/css/theme.min.css', array(), $tema_version );
 
 	// THEME JS
-	wp_enqueue_script( 'tema', get_template_directory_uri() . '/js/theme.js', array( 'jquery' ), $tema_version, true );
+	wp_enqueue_script( 'tema', get_template_directory_uri() . '/assets/js/theme.js', array( 'jquery' ), $tema_version, true );
 
 	// CSS DEFAULT
 	wp_enqueue_style( 'default-style', get_stylesheet_uri(), array(), $tema_version );
