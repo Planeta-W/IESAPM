@@ -2,6 +2,10 @@
 
 #js-banner-swiper{
 
+    .swiper-pagination{
+        background-color: transparent;
+    }
+
     .swiper-button-prev{
         left: 10px;
     }

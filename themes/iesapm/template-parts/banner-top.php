@@ -5,7 +5,7 @@
 
             <?php
             $args = array(
-                'post_type'      => 'banners',
+                'post_type'      => 'banner-header',
                 'posts_per_page' => -1,
                 'orderby'        => 'date',
                 'order'          => 'ASC',
