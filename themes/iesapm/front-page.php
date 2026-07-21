@@ -28,16 +28,23 @@
     <section class="pad-featured pb-0">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Graduação</h2>
-            <div class="owl-carousel owl-theme position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-carousel-cursos">
+                <div class="swiper-wrapper">
 
-                <?php while ($query_graduacao->have_posts()) : $query_graduacao->the_post(); ?>
+                    <?php while ($query_graduacao->have_posts()) : $query_graduacao->the_post(); ?>
 
-                <article id="article-id-<?php the_ID();?>" <?php post_class('item h-100'); ?>>
-                    <?php get_template_part('template-parts/card-curso'); ?>
-                </article>
+                    <article id="article-id-<?php the_ID();?>" <?php post_class('swiper-slide item h-100'); ?>>
+                        <?php get_template_part('template-parts/card-curso'); ?>
+                    </article>
 
-                <?php endwhile; ?>
+                    <?php endwhile; ?>
 
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-prev"><span class="icon-arrow_back_ios"></span></div>
+                <div class="swiper-button-next"><span class="icon-arrow_forward_ios"></span></div>
             </div>
 
             <div class="d-flex justify-content-center mt-5">
@@ -64,16 +71,23 @@
     <section class="pad-featured pb-0">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Pós-Graduação</h2>
-            <div class="owl-carousel owl-theme position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-carousel-cursos">
+                <div class="swiper-wrapper">
 
-                <?php while ($query_pos->have_posts()) : $query_pos->the_post(); ?>
+                    <?php while ($query_pos->have_posts()) : $query_pos->the_post(); ?>
 
-                <article id="article-id-<?php the_ID();?>" <?php post_class('item h-100'); ?>>
-                    <?php get_template_part('template-parts/card-curso'); ?>
-                </article>
+                    <article id="article-id-<?php the_ID();?>" <?php post_class('swiper-slide item h-100'); ?>>
+                        <?php get_template_part('template-parts/card-curso'); ?>
+                    </article>
 
-                <?php endwhile; ?>
+                    <?php endwhile; ?>
 
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-prev"><span class="icon-arrow_back_ios"></span></div>
+                <div class="swiper-button-next"><span class="icon-arrow_forward_ios"></span></div>
             </div>
 
             <div class="d-flex justify-content-center mt-5">
@@ -100,16 +114,23 @@
     <section class="pad-featured">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Extensão</h2>
-            <div class="owl-carousel owl-theme position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-carousel-cursos">
+                <div class="swiper-wrapper">
 
-                <?php while ($query_extensao->have_posts()) : $query_extensao->the_post(); ?>
+                    <?php while ($query_extensao->have_posts()) : $query_extensao->the_post(); ?>
 
-                <article id="article-id-<?php the_ID();?>" <?php post_class('item h-100'); ?>>
-                    <?php get_template_part('template-parts/card-curso'); ?>
-                </article>
+                    <article id="article-id-<?php the_ID();?>" <?php post_class('swiper-slide item h-100'); ?>>
+                        <?php get_template_part('template-parts/card-curso'); ?>
+                    </article>
 
-                <?php endwhile; ?>
+                    <?php endwhile; ?>
 
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-prev"><span class="icon-arrow_back_ios"></span></div>
+                <div class="swiper-button-next"><span class="icon-arrow_forward_ios"></span></div>
             </div>
 
             <div class="d-flex justify-content-center mt-5">
@@ -214,36 +235,45 @@
 jQuery(document).ready(function ($) {
 
     // carousel dos cursos
-    $('.js-carousel-cursos').owlCarousel({
-        loop:     false,
-        margin:   24,
-        autoplay: false,
-        nav:      false,
-        dots:     true,
-        navText:  ['<span class="icon-arrow_back_ios"></span>', '<span class="icon-arrow_forward_ios"></span>'],
+    document.querySelectorAll('.js-carousel-cursos').forEach(function (el) {
+        new Swiper(el, {
+            slidesPerView: 1,
+            spaceBetween: 24,
+            loop: false,
+            autoplay: false,
 
-        responsive: {
-            0: {
-                items: 1,
+            pagination: {
+                el: el.querySelector('.swiper-pagination'),
+                clickable: true,
             },
 
-            576: {
-                items: 2,
+            navigation: {
+                nextEl: el.querySelector('.swiper-button-next'),
+                prevEl: el.querySelector('.swiper-button-prev'),
             },
 
-            768: {
-                items: 2,
-            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                },
 
-            992: {
-                items: 3,
-            },
+                576: {
+                    slidesPerView: 2,
+                },
 
-            1200: {
-                items: 4,
-                nav:   true,
-            },
-        }
+                768: {
+                    slidesPerView: 2,
+                },
+
+                992: {
+                    slidesPerView: 3,
+                },
+
+                1200: {
+                    slidesPerView: 4,
+                },
+            }
+        });
     });
 
     var body = $('body');

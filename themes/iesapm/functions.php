@@ -7,13 +7,7 @@ function enqueue_scripts() {
 	// VERSÃO DO TEMA
 	$tema_version = '1.3';
 
-	// OWL CAROUSEL 2
-	if ( is_front_page() ) {
-		wp_enqueue_style( 'owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css', array(), '2.3.4' );
-		wp_enqueue_script( 'owlcarousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', array( 'jquery' ), '2.3.4', true );
-	}
-
-	// SWIPER (banner do topo)
+	// SWIPER
 	if ( is_front_page() ) {
 		wp_enqueue_style( 'swiper', 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/14.0.5/swiper-bundle.min.css', array(), '14.0.5' );
 		wp_enqueue_script( 'swiper', 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/14.0.5/swiper-bundle.min.js', array(), '14.0.5', true );

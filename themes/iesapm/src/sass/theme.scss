@@ -15,7 +15,7 @@
 @import 'components/cards';
 //@import 'components/post-metadata';
 @import 'components/social';
-@import 'components/owl-carousel';
+@import 'components/swiper-carousel';
 @import 'components/banner-header-carousel';
 @import 'components/paginacao';
 @import 'components/list-search';
@@ -23,7 +23,7 @@
 // carousel cursos
 .js-carousel-cursos{
 
-    .owl-item{
+    .swiper-slide{
         margin-top: 10px;
     }
 
