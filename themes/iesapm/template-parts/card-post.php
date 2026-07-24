@@ -1,6 +1,6 @@
 <div class="c-card-post h-100 row g-0 rounded-4 overflow-hidden">
 
-    <div class="c-card-post__thumb col-12" style="height: 180px">
+    <div class="c-card-post__thumb col-12">
         <a href="<?php the_permalink(); ?>" class="text-decoration-none" title="<?php the_title(); ?>">
             <?php
             if ( has_post_thumbnail() ) {

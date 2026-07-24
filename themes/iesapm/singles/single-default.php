@@ -56,6 +56,12 @@ $id_post = get_the_id(); ?>
                         </div>
 
                         <div class="entry-content-post">
+                            <?php if (has_post_thumbnail() && get_field('exibir_imagem_destacada_em_post') == 1) : ?>
+                            <div class="mb-4">
+                                <?php the_post_thumbnail('full', array('class' => 'img-fluid w-100')); ?>
+                            </div>
+                            <?php endif; ?>
+
                             <?php the_content(); ?>
 
                             <div>
