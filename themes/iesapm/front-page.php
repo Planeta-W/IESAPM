@@ -144,7 +144,6 @@
     endif;
     ?>
 
-    <?php if (isset($_GET['homolog'])) : ?>
     <?php
     $args = array(
         'post_type' => 'cursos_livres',
@@ -187,7 +186,6 @@
     wp_reset_postdata();
     endif;
     ?>
-    <?php endif; ?>
 
     <section class="pad-featured bg-light">
         <div class="container">

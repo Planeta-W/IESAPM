@@ -41,7 +41,15 @@
                 </article>
 
                 <?php
-                endwhile;endif;
+                endwhile; else: ?>
+
+                <div class="col-12 text-center py-5">
+                    <p class="fs-5 mb-4">Nenhum curso cadastrado.</p>
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">Voltar para home</a>
+                </div>
+
+                <?php
+                endif;
                 wp_reset_query();
                 ?>
 
