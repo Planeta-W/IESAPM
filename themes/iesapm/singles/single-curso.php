@@ -1,6 +1,6 @@
 <?php
 /**
- * single de graduação / pós-graduação / extensão
+ * single de graduação / pós-graduação / extensão / curso livre
  *
  * @package WordPress
  * @subpackage iesapm

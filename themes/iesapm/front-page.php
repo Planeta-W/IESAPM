@@ -144,6 +144,51 @@
     endif;
     ?>
 
+    <?php if (isset($_GET['homolog'])) : ?>
+    <?php
+    $args = array(
+        'post_type' => 'cursos_livres',
+        'posts_per_page' => 8,
+        'orderby' => 'title',
+        'order' => 'ASC'
+    );
+    $query_cursos_livres = new WP_Query($args);
+
+    if ($query_cursos_livres->have_posts()): ?>
+    <section class="pad-featured">
+        <div class="container">
+            <h2 class="mb-4 text-center text-uppercase">Cursos Livres</h2>
+            <div class="swiper position-relative mt-4 js-carousel-cursos">
+                <div class="swiper-wrapper">
+
+                    <?php while ($query_cursos_livres->have_posts()) : $query_cursos_livres->the_post(); ?>
+
+                    <article id="article-id-<?php the_ID();?>" <?php post_class('swiper-slide item h-100'); ?>>
+                        <?php get_template_part('template-parts/card-curso'); ?>
+                    </article>
+
+                    <?php endwhile; ?>
+
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-prev"><span class="icon-arrow_back_ios"></span></div>
+                <div class="swiper-button-next"><span class="icon-arrow_forward_ios"></span></div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-5">
+                <a href="<?php echo get_post_type_archive_link('cursos_livres'); ?>" title="Ver todos os cursos de Cursos Livres" class="btn btn-secondary">Ver todos</a>
+            </div>
+
+        </div>
+    </section>
+    <?php
+    wp_reset_postdata();
+    endif;
+    ?>
+    <?php endif; ?>
+
     <section class="pad-featured bg-light">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Notícias</h2>
