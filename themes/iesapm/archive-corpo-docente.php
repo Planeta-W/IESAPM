@@ -30,8 +30,6 @@
                 <?php get_template_part('template-parts/breadcrumbs'); ?>
             </div>
 
-            <?php if (isset($_GET['homolog'])) : ?>
-
             <?php
             $areas_order = array(42, 43, 44, 45);
 
@@ -56,6 +54,8 @@
                 $docentes_query = new WP_Query(array(
                     'post_type'      => 'corpo-docente',
                     'posts_per_page' => -1,
+                    'orderby'        => 'title',
+                    'order'          => 'ASC',
                     'tax_query'      => array(
                         array(
                             'taxonomy' => 'area',
@@ -91,25 +91,6 @@
                 <?php wp_reset_postdata(); ?>
 
                 <?php endforeach; ?>
-
-            <?php endif; ?>
-
-            <?php else : ?>
-
-            <div class="row gy-5 g-sm-3 g-xl-4">
-
-                <?php if (have_posts()): while (have_posts()) : the_post(); ?>
-
-                <article id="article-id-<?php the_id();?>" <?php post_class('col-sm-6 col-md-4 col-xl-3'); ?>>
-                    <?php get_template_part('template-parts/card-corpo-docente'); ?>
-                </article>
-
-                <?php
-                endwhile;endif;
-                wp_reset_query();
-                ?>
-
-            </div>
 
             <?php endif; ?>
 
