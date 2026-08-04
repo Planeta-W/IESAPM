@@ -1,5 +1,5 @@
 <?php
-if(is_singular(array('graduacao', 'pos-graduacao', 'extensao', 'cursos-livres'))):
+if(is_singular(array('graduacao', 'pos-graduacao', 'extensao', 'cursos_livres'))):
 
 get_template_part('singles/single-curso');
 

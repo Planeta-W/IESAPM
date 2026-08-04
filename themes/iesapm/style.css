@@ -16,3 +16,7 @@
 .postid-3093 .wp-bootstrap-blocks-row .wp-element-caption {
     text-align: center;
 }
+
+.addtoany_share_save_container{
+	display: none;
+}
