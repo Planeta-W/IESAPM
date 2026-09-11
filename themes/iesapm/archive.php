@@ -43,8 +43,13 @@
                 <?php
                 endwhile; else: ?>
 
+                <?php
+                $post_type_obj = get_post_type_object(get_post_type() ?: get_query_var('post_type'));
+                $singular_name = $post_type_obj ? $post_type_obj->labels->singular_name : __('item', 'iesapm');
+                ?>
+
                 <div class="col-12 text-center py-5">
-                    <p class="fs-5 mb-4">Nenhum curso cadastrado.</p>
+                    <p class="fs-5 mb-4"><?php printf(esc_html__('Nenhum %s cadastrado.', 'iesapm'), esc_html(strtolower($singular_name))); ?></p>
                     <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">Voltar para home</a>
                 </div>
 
