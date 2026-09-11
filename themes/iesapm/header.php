@@ -81,15 +81,15 @@ endif; ?>
                </div>
             </div>
 
-            <div class="align-items-center d-flex h-100 d-xl-none">
+            <div class="align-items-center d-flex h-100">
                <span class="display-2 fw-light icon-menu js-nav-toggle text-primary"></span>
             </div>
 
          </div>
 
-         <div class="col-12 col-xl-auto ms-xl-auto">
+         <div class="col-12 col-xl-auto s-nav-menu-col">
             <div class="c-nav-menu js-nav-menu">
-               <div class="c-nav-menu__header d-flex justify-content-end p-2 d-xl-none">
+               <div class="c-nav-menu__header d-flex justify-content-end p-2">
                   <span class="fs-1 icon-clear me-3 mt-3 text-white js-nav-toggle"></span>
                </div>
                <div class="c-nav-menu__itens d-lg-flex justify-content-lg-end">

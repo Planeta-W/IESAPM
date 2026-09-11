@@ -1,5 +1,5 @@
 // menu principal
-@include media-breakpoint-down(xl) {
+@mixin menu-mobile {
     .c-nav-menu {
         background-color: #02625a;
         position: fixed;
@@ -134,8 +134,7 @@
     }
 }
 
-@include media-breakpoint-up(xl) {
-
+@mixin menu-desktop {
     .c-nav-menu {
 
         .nav-menu-principal {
@@ -246,5 +245,21 @@
         }
 
     }
+}
 
+// abaixo de xl: sempre menu mobile
+@include media-breakpoint-down(xl) {
+    @include menu-mobile;
+}
+
+// a partir de xl: menu desktop, exceto quando o header está sticky (usa o menu mobile)
+@include media-breakpoint-up(xl) {
+
+    .l-header-site:not(.sticky) {
+        @include menu-desktop;
+    }
+
+    .l-header-site.sticky {
+        @include menu-mobile;
+    }
 }
