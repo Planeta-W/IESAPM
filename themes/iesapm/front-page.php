@@ -187,7 +187,7 @@
     endif;
     ?>
 
-    <?php if (isset($_GET['homolog'])) :
+    <?php
     $args = array(
         'post_type' => 'eventos',
         'posts_per_page' => 8,
@@ -229,7 +229,6 @@
     wp_reset_postdata();
     endif;
     ?>
-    <?php endif; ?>
 
     <section class="pad-featured bg-light">
         <div class="container">

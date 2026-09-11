@@ -1,5 +1,5 @@
 // menu principal
-@include media-breakpoint-down(lg) {
+@include media-breakpoint-down(xl) {
     .c-nav-menu {
         background-color: #02625a;
         position: fixed;
@@ -134,7 +134,7 @@
     }
 }
 
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(xl) {
 
     .c-nav-menu {
 

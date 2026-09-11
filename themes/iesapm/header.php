@@ -70,7 +70,7 @@ endif; ?>
 
          <div class="col-auto ms-auto">
 
-            <div class="align-items-center justify-content-end row d-none d-lg-flex mt-lg-4 col-direita">
+            <div class="align-items-center justify-content-end row d-none d-xl-flex mt-xl-4 col-direita">
                <div class="col-auto l-buttons d-flex">
                   <a href="https://educacional.usecerbrum.net/AreaEducacional/paginas/externas/pgProcessosSeletivos.aspx?login=631" target="_blank" class="btn btn-secondary" title="Processo seletivo">Processo seletivo</a>
                   <a href="http://educacional.usecerbrum.net/inicio.aspx" class="btn btn-outline-primary ms-3" title="Área restrita" target="_blank"><span class="icon-user me-2"></span>Área restrita</a>
@@ -81,21 +81,21 @@ endif; ?>
                </div>
             </div>
 
-            <div class="align-items-center d-flex h-100 d-lg-none">
+            <div class="align-items-center d-flex h-100 d-xl-none">
                <span class="display-2 fw-light icon-menu js-nav-toggle text-primary"></span>
             </div>
 
          </div>
 
-         <div class="col-12 col-lg-auto ms-lg-auto">
+         <div class="col-12 col-xl-auto ms-xl-auto">
             <div class="c-nav-menu js-nav-menu">
-               <div class="c-nav-menu__header d-flex justify-content-end p-2 d-lg-none">
+               <div class="c-nav-menu__header d-flex justify-content-end p-2 d-xl-none">
                   <span class="fs-1 icon-clear me-3 mt-3 text-white js-nav-toggle"></span>
                </div>
                <div class="c-nav-menu__itens d-lg-flex justify-content-lg-end">
                   <?php get_template_part('template-parts/menu-principal'); ?>
                </div>
-               <div class="d-flex justify-content-center my-5 d-lg-none">
+               <div class="d-flex justify-content-center my-5 d-xl-none">
                   <?php get_template_part('template-parts/rede-social'); ?>
                </div>
             </div>

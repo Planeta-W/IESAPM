@@ -1,0 +1,26 @@
+services:
+  wordpress:
+    restart: unless-stopped
+    container_name: Iesapm
+    build:
+      context: .
+    volumes:
+      - ./.env:/var/www/html/.env
+      - ./server/composer.json:/var/www/html/composer.json
+      - ./server/php.ini:/usr/local/etc/php/php.ini
+      - ./server/wp-config.php:/var/www/html/wp-config.php
+      - ./server/entrypoint.sh:/entrypoint-custom.sh
+      - ./themes/iesapm:/var/www/html/wp-content/themes/iesapm/
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_LOCALE: pt_BR
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/wp-json"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    entrypoint: ["bash", "/entrypoint-custom.sh"]

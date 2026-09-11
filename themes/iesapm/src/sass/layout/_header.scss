@@ -34,7 +34,7 @@
         -webkit-box-shadow: 0 10px 10px -10px rgba(#000, .35);
         box-shadow: 0 10px 10px -10px rgba(#000, .35);
 
-        @include media-breakpoint-up(lg) {
+        @include media-breakpoint-up(xl) {
 
             .brand {
                 max-width: 170px;
@@ -45,11 +45,13 @@
             }
 
             .c-nav-menu{
-                margin-top: 1.1rem!important;
+                // margin-top: 1.1rem!important;
 
-                .nav-menu-principal ul.sub-menu>li.menu-item:first-child{
-                    margin-top: 24px;
-                }
+                // .nav-menu-principal ul.sub-menu>li.menu-item:first-child{
+                //     margin-top: 24px;
+                // }
+
+                display: none;
             }
         }
     }
