@@ -83,8 +83,9 @@ CPT
 include ('inc/cpt/graduacao-cpt.php');
 include ('inc/cpt/pos-graduacao-cpt.php');
 include ('inc/cpt/extensao-cpt.php');
-include ('inc/cpt/corpo-docente-cpt.php');
 include ('inc/cpt/cursos-livres-cpt.php');
+include ('inc/cpt/eventos-cpt.php');
+include ('inc/cpt/corpo-docente-cpt.php');
 
 /*--------------------------------------------------------------
 Pre_get_posts
