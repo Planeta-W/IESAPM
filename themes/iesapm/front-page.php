@@ -177,7 +177,7 @@
             </div>
 
             <div class="d-flex justify-content-center mt-5">
-                <a href="<?php echo get_post_type_archive_link('cursos_livres'); ?>" title="Ver todos os cursos de Cursos Livres" class="btn btn-secondary">Ver todos</a>
+                <a href="<?php echo get_post_type_archive_link('cursos_livres'); ?>" title="Ver todos os cursos livres" class="btn btn-secondary">Ver todos</a>
             </div>
 
         </div>
@@ -186,6 +186,50 @@
     wp_reset_postdata();
     endif;
     ?>
+
+    <?php if (isset($_GET['homolog'])) :
+    $args = array(
+        'post_type' => 'eventos',
+        'posts_per_page' => 8,
+        'orderby' => 'title',
+        'order' => 'ASC'
+    );
+    $query_eventos = new WP_Query($args);
+
+    if ($query_eventos->have_posts()): ?>
+    <section class="pad-featured">
+        <div class="container">
+            <h2 class="mb-4 text-center text-uppercase">Eventos</h2>
+            <div class="swiper position-relative mt-4 js-carousel-eventos">
+                <div class="swiper-wrapper">
+
+                    <?php while ($query_eventos->have_posts()) : $query_eventos->the_post(); ?>
+
+                    <article id="article-id-<?php the_ID();?>" <?php post_class('swiper-slide item h-100'); ?>>
+                        <?php get_template_part('template-parts/card-curso'); ?>
+                    </article>
+
+                    <?php endwhile; ?>
+
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-prev"><span class="icon-arrow_back_ios"></span></div>
+                <div class="swiper-button-next"><span class="icon-arrow_forward_ios"></span></div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-5">
+                <a href="<?php echo get_post_type_archive_link('eventos'); ?>" title="Ver todos os eventos" class="btn btn-secondary">Ver todos</a>
+            </div>
+
+        </div>
+    </section>
+    <?php
+    wp_reset_postdata();
+    endif;
+    ?>
+    <?php endif; ?>
 
     <section class="pad-featured bg-light">
         <div class="container">
