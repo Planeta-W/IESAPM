@@ -5,7 +5,7 @@ ESTILOS E SCRIPTS
 function enqueue_scripts() {
 
 	// VERSÃO DO TEMA
-	$tema_version = '1.3';
+	$tema_version = '1.4';
 
 	// SWIPER
 	if ( is_front_page() ) {
