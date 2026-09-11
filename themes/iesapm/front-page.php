@@ -28,7 +28,7 @@
     <section class="pad-featured pb-0">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Graduação</h2>
-            <div class="swiper position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-swiper-featured">
                 <div class="swiper-wrapper">
 
                     <?php while ($query_graduacao->have_posts()) : $query_graduacao->the_post(); ?>
@@ -71,7 +71,7 @@
     <section class="pad-featured pb-0">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Pós-Graduação</h2>
-            <div class="swiper position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-swiper-featured">
                 <div class="swiper-wrapper">
 
                     <?php while ($query_pos->have_posts()) : $query_pos->the_post(); ?>
@@ -114,7 +114,7 @@
     <section class="pad-featured">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Extensão</h2>
-            <div class="swiper position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-swiper-featured">
                 <div class="swiper-wrapper">
 
                     <?php while ($query_extensao->have_posts()) : $query_extensao->the_post(); ?>
@@ -157,7 +157,7 @@
     <section class="pad-featured">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Cursos Livres</h2>
-            <div class="swiper position-relative mt-4 js-carousel-cursos">
+            <div class="swiper position-relative mt-4 js-swiper-featured">
                 <div class="swiper-wrapper">
 
                     <?php while ($query_cursos_livres->have_posts()) : $query_cursos_livres->the_post(); ?>
@@ -200,7 +200,7 @@
     <section class="pad-featured">
         <div class="container">
             <h2 class="mb-4 text-center text-uppercase">Eventos</h2>
-            <div class="swiper position-relative mt-4 js-carousel-eventos">
+            <div class="swiper position-relative mt-4 js-swiper-featured">
                 <div class="swiper-wrapper">
 
                     <?php while ($query_eventos->have_posts()) : $query_eventos->the_post(); ?>
@@ -322,7 +322,7 @@
 jQuery(document).ready(function ($) {
 
     // carousel dos cursos
-    document.querySelectorAll('.js-carousel-cursos').forEach(function (el) {
+    document.querySelectorAll('.js-swiper-featured').forEach(function (el) {
         new Swiper(el, {
             slidesPerView: 1,
             spaceBetween: 24,
