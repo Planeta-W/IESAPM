@@ -265,7 +265,7 @@
 
     <section class="pad-featured" style="background-image: url('<?php echo get_bloginfo( 'wpurl' ); ?>/wp-content/uploads/bg-news.jpg'); background-size: cover;">
         <div class="container">
-            <h2 class="mb-4 text-center text-uppercase text-white">Conecte-se a IESAPM</h2>
+            <h2 class="mb-4 text-center text-uppercase text-white">Conecte-se ao IESAPM</h2>
             <form id="formNews" name="formNews" method="post" action="<?php bloginfo('url')?>/form_action/news.php" class="row">
                 <div class="col-lg-6">
                     <div class="form-floating mb-3">
