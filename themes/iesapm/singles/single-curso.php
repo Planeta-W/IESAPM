@@ -66,15 +66,15 @@
                         <?php endif; ?>
 
                         <?php
-                        $coordenadores_posts = get_field('coordenador');
-                        if( $coordenadores_posts ): ?>
+                        $professores_posts = get_field('professor');
+                        if( $professores_posts ): ?>
 
-                        <div class="mt-5 d-none">
+                        <div class="mt-5">
                             <h2 class="text-primary h5 mb-4">Professores</h2>
 
                             <div class="row g-3">
 
-                                <?php foreach( $coordenadores_posts as $post ): ?>
+                                <?php foreach( $professores_posts as $post ): ?>
                                 <?php setup_postdata($post); ?>
 
                                 <article id="article-id-<?php the_ID();?>" <?php post_class('col-sm-6 col-lg-4'); ?>>
