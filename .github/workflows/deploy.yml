@@ -22,5 +22,5 @@ jobs:
         # Sem esta opção o envio é por FTP puro (senha e arquivos sem criptografia).
         # Descomente se o servidor aceitar FTPS (a maioria das hospedagens aceita).
         protocol: ftps
-        server-dir: public_html/wp-content/themes/iesapm
-        local-dir: ./themes/iesapm
+        server-dir: public_html/wp-content/themes/iesapm/
+        local-dir: ./themes/iesapm/
