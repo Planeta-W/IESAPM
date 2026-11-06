@@ -1,13 +1,13 @@
-# Editor
+# Editor / IDE
 .vscode/sftp.json
 .vscode/settings.json
 
-# Dependencies
+# Dependências (Node)
 node_modules
 package-lock.json
 
-# Ferramentas
-.claude
-
-# Ambiente
+# Variáveis de ambiente e segredos
 .env
+
+# Ferramentas / configs locais
+.claude

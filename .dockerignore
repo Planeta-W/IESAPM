@@ -1,0 +1,9 @@
+# O Dockerfile não copia nada do projeto; evita mandar segredos e
+# pastas pesadas para o daemon a cada build
+.env
+.git
+.github
+.vscode
+.claude
+node_modules
+themes

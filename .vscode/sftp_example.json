@@ -1,11 +1,11 @@
 {
-  "name": "IESAPM",
+  "name": "MeuProjeto",
   "host": "",
   "protocol": "sftp",
   "port": 22,
   "username": "",
   "password": "",
-  "remotePath": "/home/iesapm1/public_html/site/wp-content/themes/",
+  "remotePath": "/home/USUARIO/public_html/wp-content/themes",
   "context": "themes",
   "uploadOnSave": false,
   "watcher": {

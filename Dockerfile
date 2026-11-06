@@ -1,21 +1,17 @@
-FROM composer:2 AS composer
+# Versões fixas: a imagem só muda quando estes valores mudarem.
+# Para trocar de versão é preciso apagar o volume (docker compose down -v),
+# porque o core fica guardado nele e não é atualizado sozinho.
+ARG WP_VERSION=7.1.3
+ARG PHP_VERSION=8.5
+ARG WP_CLI_VERSION=2.12.0
 
-FROM wordpress:php8.2-apache
+FROM wordpress:cli-${WP_CLI_VERSION} AS wpcli
 
-# Copia o binário do Composer da imagem oficial (evita download via curl)
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+FROM wordpress:${WP_VERSION}-php${PHP_VERSION}-apache
 
-# Instala as dependências necessárias
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev libzip-dev libxml2-dev curl \
-    && docker-php-ext-install pdo_mysql mysqli zip \
-    && rm -rf /var/lib/apt/lists/*
+# WP-CLI copiado da imagem oficial (versão fixa, sem download no build)
+COPY --from=wpcli /usr/local/bin/wp /usr/local/bin/wp
 
-# Habilita o mod_rewrite do Apache para o .htaccess funcionar
-RUN a2enmod rewrite
-
-# Instala WP-CLI (uma vez no build, não a cada startup)
-RUN curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-    && chmod +x wp-cli.phar \
-    && mv wp-cli.phar /usr/local/bin/wp
-
+# pdo_mysql é usado pelos handlers do tema
+# (mysqli e zip já vêm na imagem; curl e mod_rewrite também, então não precisam ser instalados)
+RUN docker-php-ext-install pdo_mysql

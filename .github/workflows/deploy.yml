@@ -5,17 +5,22 @@ on:
 name: 🚀 Deploy do tema WordPress para o FTP (Produção)
 jobs:
   web-deploy:
-    name: 🎉 Instalando OS
+    name: 🎉 Enviando tema
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Verificando dados do repositório
       uses: actions/checkout@v4
 
+    # Configure os secrets host, user e pass no repositório do GitHub.
+    # Só a pasta themes/ é enviada; o ambiente Docker não vai para o servidor.
     - name: 📂 Usando action do FTP e fazendo upload de arquivos
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ secrets.host }}
         username: ${{ secrets.user }}
         password: ${{ secrets.pass }}
-        server-dir: public_html/site/wp-content/themes/
-        local-dir: ./themes/
+        # Sem esta opção o envio é por FTP puro (senha e arquivos sem criptografia).
+        # Descomente se o servidor aceitar FTPS (a maioria das hospedagens aceita).
+        protocol: ftps
+        server-dir: public_html/wp-content/themes/iesapm
+        local-dir: ./themes/iesapm

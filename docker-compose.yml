@@ -1,26 +1,38 @@
 services:
   wordpress:
     restart: unless-stopped
-    container_name: Iesapm
+    # PROJECT_NAME, THEME_NAME e HTTP_PORT vêm do .env
+    container_name: ${PROJECT_NAME}
     build:
       context: .
     volumes:
-      - ./.env:/var/www/html/.env
-      - ./server/composer.json:/var/www/html/composer.json
-      - ./server/php.ini:/usr/local/etc/php/php.ini
+      # WordPress (core, plugins, uploads locais, debug.log) persiste entre down/up;
+      # apagar com "docker compose down -v" para recomeçar ou trocar de versão
+      - wp_data:/var/www/html
+      - ./server/php.ini:/usr/local/etc/php/conf.d/zz-custom.ini
       - ./server/wp-config.php:/var/www/html/wp-config.php
       - ./server/entrypoint.sh:/entrypoint-custom.sh
-      - ./themes/iesapm:/var/www/html/wp-content/themes/iesapm/
+      - ./themes/${THEME_NAME}:/var/www/html/wp-content/themes/${THEME_NAME}/
+    # Variáveis lidas pelo wp-config.php via getenv()
     env_file:
       - .env
     environment:
       WORDPRESS_LOCALE: pt_BR
+    extra_hosts:
+      # Faz DB_HOST="host.docker.internal" funcionar também no Docker do Linux
+      # (no Docker Desktop do Windows/Mac já existe)
+      - "host.docker.internal:host-gateway"
     ports:
-      - "80:80"
+      # Só acessível pela própria máquina
+      - "127.0.0.1:${HTTP_PORT:-80}:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/wp-json"]
+      # ?rest_route= funciona com qualquer permalink (/wp-json dá 404 com "Simples")
+      test: ["CMD", "curl", "-f", "http://localhost/?rest_route=/"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
     entrypoint: ["bash", "/entrypoint-custom.sh"]
+
+volumes:
+  wp_data:

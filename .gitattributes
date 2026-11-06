@@ -1,0 +1,2 @@
+# Força LF para arquivos que rodam em Linux/Docker
+*.sh text eol=lf

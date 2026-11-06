@@ -2,122 +2,68 @@
 
 define( 'WP_ENVIRONMENT_TYPE', 'local' );
 
-require_once __DIR__ . '/vendor/autoload.php'; // Certifique-se de que o autoload do Composer está disponível
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$http_host = $_SERVER['HTTP_HOST'] ?? 'cli';
-
-if ($http_host === 'localhost' || $http_host === 'cli') {
-    // Ambiente local ou WP-CLI (sem HTTP_HOST)
-    define('WP_HOME', 'http://localhost');
-    define('WP_SITEURL', 'http://localhost');
-} else {
-    // Produção
-    define('WP_HOME', $_ENV['WP_HOME']);
-    define('WP_SITEURL', $_ENV['WP_SITEURL']);
+// Variáveis do .env chegam como variáveis de ambiente (env_file do docker-compose.yml)
+function env( $name, $default = '' ) {
+    $value = getenv( $name );
+    return $value === false ? $default : $value;
 }
 
-/**
- * The base configuration for WordPress
- *
- * The wp-config.php creation script uses this file during the installation.
- * You don't have to use the website, you can copy this file to "wp-config.php"
- * and fill in the values.
- *
- * This file contains the following configurations:
- *
- * * Database settings
- * * Secret keys
- * * Database table prefix
- * * ABSPATH
- *
- * @link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/
- *
- * @package WordPress
- */
+$http_host = $_SERVER['HTTP_HOST'] ?? 'cli';
+$http_port = env('HTTP_PORT', '80');
 
-// ** Database settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define( 'DB_NAME', $_ENV['DB_NAME'] );
+if ($http_host === 'cli') {
+    // WP-CLI (sem HTTP_HOST): usa a porta publicada no host
+    $local_url = 'http://localhost' . ($http_port === '80' ? '' : ':' . $http_port);
+    define('WP_HOME', $local_url);
+    define('WP_SITEURL', $local_url);
+} elseif (preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $http_host)) {
+    // Acesso local pelo navegador ou healthcheck (com ou sem porta)
+    define('WP_HOME', 'http://' . $http_host);
+    define('WP_SITEURL', 'http://' . $http_host);
+} else {
+    // Outro host (ex.: túnel/ngrok): usa as URLs do .env
+    define('WP_HOME', env('WP_HOME'));
+    define('WP_SITEURL', env('WP_SITEURL'));
+}
 
-/** Database username */
-define( 'DB_USER', $_ENV['DB_USER'] );
-
-/** Database password */
-define( 'DB_PASSWORD', $_ENV['DB_PASS'] );
-
-/** Database hostname */
-define( 'DB_HOST', $_ENV['DB_HOST'] );
-
-/** Database charset to use in creating database tables. */
+// ** Banco de dados ** //
+define( 'DB_NAME', env('DB_NAME') );
+define( 'DB_USER', env('DB_USER') );
+define( 'DB_PASSWORD', env('DB_PASS') );
+define( 'DB_HOST', env('DB_HOST') );
 define( 'DB_CHARSET', 'utf8mb4' );
-
-/** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-/**#@+
- * Authentication unique keys and salts.
- *
- * Change these to different unique phrases! You can generate these using
- * the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}.
- *
- * You can change these at any point in time to invalidate all existing cookies.
- * This will force all users to have to log in again.
- *
- * @since 2.6.0
- */
+// ** Chaves e salts ** //
+define( 'AUTH_KEY',         env('AUTH_KEY') );
+define( 'SECURE_AUTH_KEY',  env('SECURE_AUTH_KEY') );
+define( 'LOGGED_IN_KEY',    env('LOGGED_IN_KEY') );
+define( 'NONCE_KEY',        env('NONCE_KEY') );
+define( 'AUTH_SALT',        env('AUTH_SALT') );
+define( 'SECURE_AUTH_SALT', env('SECURE_AUTH_SALT') );
+define( 'LOGGED_IN_SALT',   env('LOGGED_IN_SALT') );
+define( 'NONCE_SALT',       env('NONCE_SALT') );
 
-define( 'AUTH_KEY',         $_ENV['AUTH_KEY'] );
-define( 'SECURE_AUTH_KEY',  $_ENV['SECURE_AUTH_KEY'] );
-define( 'LOGGED_IN_KEY',    $_ENV['LOGGED_IN_KEY'] );
-define( 'NONCE_KEY',        $_ENV['NONCE_KEY'] );
-define( 'AUTH_SALT',        $_ENV['AUTH_SALT'] );
-define( 'SECURE_AUTH_SALT', $_ENV['SECURE_AUTH_SALT'] );
-define( 'LOGGED_IN_SALT',   $_ENV['LOGGED_IN_SALT'] );
-define( 'NONCE_SALT',       $_ENV['NONCE_SALT'] );
+$table_prefix = env('DB_PREFIX') ?: 'wp_';
 
+// Sem atualizações automáticas (core, plugins, temas): a versão do WordPress é a
+// fixada no Dockerfile, e uma atualização local poderia alterar o banco de produção
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
 
-/**#@-*/
+// ** Debug ** //
+define( 'WP_DEBUG', true );
+// Grava em wp-content/debug.log em vez de exibir na tela (avisos de plugins
+// quebrariam respostas JSON, inclusive o healthcheck em /wp-json)
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
+@ini_set( 'display_errors', '0' );
 
-/**
- * WordPress database table prefix.
- *
- * You can have multiple installations in one database if you give each
- * a unique prefix. Only numbers, letters, and underscores please!
- *
- * At the installation time, database tables are created with the specified prefix.
- * Changing this value after WordPress is installed will make your site think
- * it has not been installed.
- *
- * @link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/#table-prefix
- */
-$table_prefix = $_ENV['DB_PREFIX'];
+/* Adicione valores personalizados entre esta linha e a linha "Pare de editar". */
 
+/* Pare de editar! */
 
-/**
- * For developers: WordPress debugging mode.
- *
- * Change this to true to enable the display of notices during development.
- * It is strongly recommended that plugin and theme developers use WP_DEBUG
- * in their development environments.
- *
- * For information on other constants that can be used for debugging,
- * visit the documentation.
- *
- * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
- */
-define( 'WP_DEBUG', false );
-
-/* Add any custom values between this line and the "stop editing" line. */
-
-/* That's all, stop editing! Happy publishing. */
-
-/** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );
 }
 
-/** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
