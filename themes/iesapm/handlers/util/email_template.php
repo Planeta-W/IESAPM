@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Monta o HTML do e-mail de confirmação de contato/carreira.
+ * Monta o HTML do e-mail de confirmação de contato.
  *
  * @param string $titulo    Título exibido no cabeçalho do card (ex: "Contato recebido")
  * @param string $nome      Nome da pessoa que preencheu o formulário
@@ -13,11 +13,11 @@
 function gerarEmailHTML($titulo, $nome, $intro, $campos)
 {
     $corFundo      = '#f2f2f2';
-    $corTexto      = '#4a4a4a';
+    $corTexto      = '#585858';
     $corTextoSuave = '#7a7a7a';
-    $corAccent     = '#016d4b';
+    $corAccent     = '#00a194';
     $corBorda      = '#ececec';
-    $logo          = 'https://iobrooklin.com.br/wp-content/uploads/2021/03/logo-promesp-brooklin-horizontal-small-v2-1.png';
+    $logo          = 'https://www.iesapm.org.br/site/wp-content/uploads/brand.png';
 
     $linhasCampos = '';
     foreach ($campos as $campo) {
@@ -43,7 +43,7 @@ function gerarEmailHTML($titulo, $nome, $intro, $campos)
               <!-- Cabeçalho -->
               <tr>
                 <td style="background-color:#ffffff; padding:32px 40px 24px 40px; text-align:center; border-bottom:3px solid ' . $corAccent . ';">
-                  <img src="' . $logo . '" width="220" alt="Instituto Oftalmológico Brooklin" style="display:block; margin:0 auto;">
+                  <img src="' . $logo . '" width="220" alt="IESAPM" style="display:block; margin:0 auto;">
                 </td>
               </tr>
 
@@ -80,14 +80,14 @@ function gerarEmailHTML($titulo, $nome, $intro, $campos)
               <tr>
                 <td style="padding:28px 40px 8px 40px; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:' . $corTexto . ';">
                   Atenciosamente,<br>
-                  <strong>Instituto Oftalmológico Brooklin</strong>
+                  <strong>IESAPM</strong>
                 </td>
               </tr>
 
               <!-- Rodapé -->
               <tr>
                 <td style="padding:24px 40px 32px 40px; border-top:1px solid ' . $corBorda . '; text-align:center;">
-                  <a href="https://www.iobrooklin.com.br/" target="_blank" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:' . $corAccent . '; text-decoration:none; font-weight:bold;">iobrooklin.com.br</a>
+                  <a href="https://www.iesapm.org.br/" target="_blank" style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:' . $corAccent . '; text-decoration:none; font-weight:bold;">iesapm.org.br</a>
                   <p style="margin:12px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; color:' . $corTextoSuave . ';">
                     Este é um e-mail automático, não é necessário respondê-lo.
                   </p>

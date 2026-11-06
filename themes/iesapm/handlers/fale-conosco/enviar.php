@@ -4,8 +4,8 @@
 FALE CONOSCO
 
 Recebe o POST do formulário (templates/fale-conosco.php), valida o
-Cloudflare Turnstile e envia a mensagem por SMTP para EMAIL_DESTINO. O e-mail do
-visitante entra apenas no Reply-To. Não grava em banco.
+Cloudflare Turnstile e envia, por SMTP, a confirmação (util/email_template.php)
+ao visitante, com cópia oculta (CCO) para EMAIL_DESTINO. Não grava em banco.
 
 Responde com redirect de volta à página do formulário, com
 ?contato=ok|campos|captcha|erro (o formulário é um POST comum, sem JS).
@@ -20,6 +20,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../../inc/env.php';
 require_once __DIR__ . '/../util/turnstile.php';
+require_once __DIR__ . '/../util/email_template.php';
 
 // O PHPMailer está em lib/phpmailer, mas não é registrado pelo autoload do Composer
 require_once __DIR__ . '/../../lib/phpmailer/src/Exception.php';
@@ -76,16 +77,25 @@ if (empty($_ENV['EMAIL_HOST']) || empty($_ENV['EMAIL_USER']) || empty($destinos)
     fale_conosco_voltar('erro');
 }
 
-$linha = function ($rotulo, $valor) {
-    return '<p><strong>' . $rotulo . ':</strong> ' . nl2br(htmlspecialchars($valor, ENT_QUOTES, 'UTF-8')) . '</p>';
-};
+$campos = array(
+    array('label' => 'Nome', 'valor' => $nome),
+    array('label' => 'E-mail', 'valor' => $email),
+    array('label' => 'Telefone', 'valor' => $telefone),
+    array('label' => 'Modalidade', 'valor' => $modalidade),
+);
+if ($curso !== '') {
+    $campos[] = array('label' => 'Curso', 'valor' => $curso);
+}
+if ($mensagem !== '') {
+    $campos[] = array('label' => 'Mensagem', 'valor' => $mensagem);
+}
 
-$corpo = $linha('Nome', $nome)
-    . $linha('E-mail', $email)
-    . $linha('Telefone', $telefone)
-    . $linha('Modalidade', $modalidade)
-    . $linha('Curso', $curso)
-    . $linha('Mensagem', $mensagem);
+$corpo = gerarEmailHTML(
+    'Contato recebido',
+    $nome,
+    'O <strong>IESAPM</strong> confirma o recebimento de suas informações enviadas pelo formulário de contato do nosso site. Pedimos, por gentileza, que aguarde nosso retorno.',
+    $campos
+);
 
 $mail = new PHPMailer(true);
 
@@ -103,16 +113,18 @@ try {
     $mail->CharSet = 'UTF-8';
 
     // EMAIL_FROM: remetente validado no provedor (ex.: Brevo, onde o login SMTP não é um e-mail de envio)
-    $mail->setFrom(!empty($_ENV['EMAIL_FROM']) ? $_ENV['EMAIL_FROM'] : $_ENV['EMAIL_USER'], 'Site IESAPM');
+    $mail->setFrom(!empty($_ENV['EMAIL_FROM']) ? $_ENV['EMAIL_FROM'] : $_ENV['EMAIL_USER'], 'IESAPM');
+
+    // Confirmação para o visitante; a cópia interna vai oculta (CCO) para não expor os endereços
+    $mail->addAddress($email, $nome);
     foreach ($destinos as $destino) {
-        $mail->addAddress($destino);
+        $mail->addBCC($destino);
     }
-    $mail->addReplyTo($email, $nome);
 
     $mail->isHTML(true);
-    $mail->Subject = 'Fale conosco - ' . $nome;
+    $mail->Subject = 'Informações recebidas - Fale conosco IESAPM';
     $mail->Body    = $corpo;
-    $mail->AltBody = strip_tags(str_replace(array('<br />', '</p>'), "\n", $corpo));
+    $mail->AltBody = 'O IESAPM recebeu suas informações pelo formulário de contato. Aguarde nosso retorno.';
 
     $mail->send();
 } catch (Exception $e) {
