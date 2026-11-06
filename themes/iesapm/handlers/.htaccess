@@ -1,0 +1,11 @@
+# connection.php só é usado via include; os endpoints dos formulários
+# (contato/, news/, avaliacao/) continuam acessíveis
+<Files "connection.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>

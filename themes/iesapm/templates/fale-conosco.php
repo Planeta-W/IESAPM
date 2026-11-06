@@ -86,7 +86,20 @@ get_header(); ?>
 
                 <article class="col-xl-7 offset-xl-1">
                     <h2 class="h5 mb-3">Formulário de contato</h2>
-                    <form id="formContato" name="formContato" method="post" action="<?php bloginfo('url')?>/form_action/faleconosco.php">
+                    <?php
+                    require_once get_template_directory() . '/inc/env.php';
+
+                    $contato_avisos = array(
+                        'ok'      => array('success', 'Mensagem enviada com sucesso! Aguarde nosso contato.'),
+                        'campos'  => array('warning', 'Preencha corretamente nome, e-mail e telefone.'),
+                        'captcha' => array('warning', 'Confirme a opção "Não sou um robô" para enviar o formulário.'),
+                        'erro'    => array('danger', 'Não foi possível enviar sua mensagem. Tente novamente mais tarde.'),
+                    );
+                    $contato_status = sanitize_key($_GET['contato'] ?? '');
+                    if (isset($contato_avisos[$contato_status])) : ?>
+                        <div class="alert alert-<?php echo $contato_avisos[$contato_status][0]; ?>" role="alert"><?php echo esc_html($contato_avisos[$contato_status][1]); ?></div>
+                    <?php endif; ?>
+                    <form id="formContato" name="formContato" method="post" action="<?php echo esc_url(get_template_directory_uri() . '/handlers/fale-conosco/enviar.php'); ?>">
                         <div class="row g-2">
                             <div class="col-xl-12">
                                 <div class="form-floating mb-3">
@@ -128,7 +141,8 @@ get_header(); ?>
                                     <label for="campo-mensagem" class="fw-bold small text-primary form-label">Deixe sua mensagem</label>
                                 </div>
                             </div>
-                            <div class="g-recaptcha" data-sitekey="6Ld2L94cAAAAAIz93YdF52IgDM4a34OBjODLNqQF"style="margin-bottom:10px;"></div>
+                            <div class="cf-turnstile mb-3" data-sitekey="<?php echo esc_attr($_ENV['TURNSTILE_SITE_KEY'] ?? ''); ?>" data-language="pt-br"></div>
+                            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
                             <div class="col-xl-12 d-flex justify-content-center justify-content-md-end">
                                 <button type="submit" class="btn btn-primary">Enviar</button>
                             </div>
