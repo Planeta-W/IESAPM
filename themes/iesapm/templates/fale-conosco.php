@@ -115,7 +115,7 @@ get_header(); ?>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control border-primary" id="campo-telefone" name="telefone" placeholder="telefone">
+                                    <input type="text" class="form-control border-primary" id="campo-telefone" name="telefone" placeholder="telefone" inputmode="tel" autocomplete="tel-national" maxlength="15">
                                     <label for="campo-telefone" class="fw-bold small text-primary form-label">Telefone *</label>
                                 </div>
                             </div>
@@ -148,6 +148,24 @@ get_header(); ?>
                             </div>
                         </div>
                     </form>
+                    <script>
+                        // Máscara de telefone: (11) 3188-4300 ou (11) 91234-5678
+                        (function () {
+                            var tel = document.getElementById('campo-telefone');
+                            tel.addEventListener('input', function () {
+                                var d = tel.value.replace(/\D/g, '').slice(0, 11);
+                                if (d.length > 10) {
+                                    tel.value = d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+                                } else if (d.length > 6) {
+                                    tel.value = d.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                                } else if (d.length > 2) {
+                                    tel.value = d.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+                                } else {
+                                    tel.value = d;
+                                }
+                            });
+                        })();
+                    </script>
                 </article>
 
             </div>
