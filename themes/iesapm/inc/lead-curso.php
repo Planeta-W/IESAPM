@@ -293,9 +293,15 @@ function lead_curso_handler() {
 
 	lead_curso_enviar_rd( $lead );
 
-	lead_curso_responder( true, $espera
+	$mensagem = $espera
 		? 'Cadastro realizado! Avisaremos você quando houver novas turmas.'
-		: 'Dados enviados com sucesso! Sua inscrição foi liberada.', array(
+		: 'Dados enviados com sucesso! Sua inscrição foi liberada.';
+
+	if ( $material_url ) {
+		$mensagem .= ' O material complementar está disponível para download abaixo e também foi enviado para o seu e-mail. Confira sua caixa de entrada (e o spam).';
+	}
+
+	lead_curso_responder( true, $mensagem, array(
 		'material' => $material_url,
 	) );
 }
