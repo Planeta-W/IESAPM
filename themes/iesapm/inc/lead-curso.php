@@ -135,7 +135,9 @@ function lead_curso_handler() {
 	}
 
 	$curso = $curso_id ? get_post( $curso_id ) : null;
-	if ( ! $curso || ! in_array( $curso->post_type, array( 'graduacao', 'pos-graduacao', 'extensao', 'cursos_livres' ), true ) || $curso->post_status !== 'publish' ) {
+	// Rascunho só é aceito para quem pode editar o curso (pré-visualização no admin)
+	$curso_visivel = $curso && ( $curso->post_status === 'publish' || current_user_can( 'edit_post', $curso_id ) );
+	if ( ! $curso_visivel || ! in_array( $curso->post_type, array( 'graduacao', 'pos-graduacao', 'extensao', 'cursos_livres' ), true ) ) {
 		lead_curso_responder( false, 'Curso não encontrado.' );
 	}
 
