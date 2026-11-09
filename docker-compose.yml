@@ -12,6 +12,8 @@ services:
       - ./server/php.ini:/usr/local/etc/php/conf.d/zz-custom.ini
       - ./server/wp-config.php:/var/www/html/wp-config.php
       - ./server/entrypoint.sh:/entrypoint-custom.sh
+      # Ajustes só do ambiente local (ex.: desativa o AIOS)
+      - ./server/mu-plugins/local-dev.php:/var/www/html/wp-content/mu-plugins/local-dev.php
       - ./themes/${THEME_NAME}:/var/www/html/wp-content/themes/${THEME_NAME}/
     # Variáveis lidas pelo wp-config.php via getenv()
     env_file:
