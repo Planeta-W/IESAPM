@@ -135,7 +135,7 @@
                             ?>
 
                             <?php if ($lead_ativo && !empty($lead_material['url'])) : ?>
-                            <div id="leadMaterial" class="px-3 pt-3 text-center" hidden>
+                            <div id="leadMaterial" class="p-3 text-center" hidden>
                                 <a href="#" class="btn btn-outline-primary" target="_blank" rel="noopener">Baixar material</a>
                             </div>
                             <?php endif; ?>
