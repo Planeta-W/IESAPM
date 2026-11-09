@@ -89,7 +89,7 @@ endif; ?>
 
          <div class="col-12 col-xl-auto s-nav-menu-col">
             <div class="c-nav-menu js-nav-menu">
-               <div class="c-nav-menu__header d-flex justify-content-end p-2">
+               <div class="c-nav-menu__header d-flex justify-content-end p-2 p-xl-0">
                   <span class="fs-1 icon-clear me-3 mt-3 text-white js-nav-toggle"></span>
                </div>
                <div class="c-nav-menu__itens d-lg-flex justify-content-lg-end">
