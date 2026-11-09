@@ -1,0 +1,51 @@
+<?php
+/**
+ * Formulário de captação de lead da página de curso.
+ * Espera a variável $args['modo'] = 'inscricao' | 'espera'
+ */
+
+$modo = $args['modo'] ?? 'inscricao';
+require_once get_template_directory() . '/inc/env.php';
+
+$titulo = $modo === 'espera' ? 'Quero ser avisado das próximas turmas' : 'Preencha para liberar sua inscrição';
+$botao  = $modo === 'espera' ? 'Avise-me' : 'Liberar inscrição';
+?>
+
+<form id="formLeadCurso" class="p-3 bg-light" data-modo="<?php echo esc_attr($modo); ?>" novalidate>
+    <h3 class="h6 text-primary mb-3"><?php echo esc_html($titulo); ?></h3>
+
+    <input type="hidden" name="action" value="lead_curso">
+    <input type="hidden" name="curso_id" value="<?php echo esc_attr(get_the_ID()); ?>">
+
+    <div class="form-floating mb-2">
+        <input type="text" class="form-control border-primary" id="lead-nome" name="nome" placeholder="Nome" required>
+        <label for="lead-nome" class="fw-bold small text-primary form-label">Nome *</label>
+    </div>
+    <div class="form-floating mb-2">
+        <input type="email" class="form-control border-primary" id="lead-email" name="email" placeholder="E-mail" required>
+        <label for="lead-email" class="fw-bold small text-primary form-label">E-mail *</label>
+    </div>
+    <div class="form-floating mb-2">
+        <input type="tel" class="form-control border-primary" id="lead-celular" name="celular" placeholder="Celular" inputmode="numeric" maxlength="15" required>
+        <label for="lead-celular" class="fw-bold small text-primary form-label">Celular *</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control border-primary" id="lead-profissao" name="profissao" placeholder="Profissão" required>
+        <label for="lead-profissao" class="fw-bold small text-primary form-label">Profissão *</label>
+    </div>
+
+    <div class="form-check mb-3 small">
+        <input class="form-check-input" type="checkbox" id="lead-consentimento" name="consentimento" value="1" required>
+        <label class="form-check-label" for="lead-consentimento">
+            Li e concordo com a <a href="<?php echo esc_url(home_url('/politica-de-privacidade/')); ?>" target="_blank">Política de Privacidade</a>.
+        </label>
+    </div>
+
+    <div class="cf-turnstile mb-3" data-sitekey="<?php echo esc_attr($_ENV['TURNSTILE_SITE_KEY'] ?? ''); ?>" data-language="pt-br"></div>
+
+    <div id="leadCursoMensagem" class="small mb-3" role="alert" aria-live="polite" hidden></div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary"><?php echo esc_html($botao); ?></button>
+    </div>
+</form>

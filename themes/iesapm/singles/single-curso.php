@@ -121,27 +121,53 @@
                             </div>
                             <?php endif; ?>
 
+                            <?php
+                            $lead_modo     = get_field('lead_modo_formulario');
+                            $lead_ativo    = in_array($lead_modo, array('inscricao', 'espera'), true);
+                            $lead_material = get_field('lead_material_download');
+
+                            if ($lead_ativo) {
+                                get_template_part('template-parts/form-lead-curso', null, array('modo' => $lead_modo));
+                            }
+                            ?>
+
+                            <?php if ($lead_ativo && !empty($lead_material['url'])) : ?>
+                            <div id="leadMaterial" class="px-3 pt-3 text-center" hidden>
+                                <a href="#" class="btn btn-outline-primary" target="_blank" rel="noopener">Baixar material</a>
+                            </div>
+                            <?php endif; ?>
+
+                            <?php if ($lead_modo !== 'espera') : ?>
                             <div class="d-flex justify-content-center py-3">
                                 <?php
                                 // verifica se o link é uma página externa
                                 $pega_target = get_field('a_inscricao_e_uma_pagina_externa');
 
+                                // com formulário ativo, o botão começa bloqueado até o envio
+                                $btn_classe = 'btn btn-primary';
+                                $btn_attrs  = '';
+                                if ($lead_modo === 'inscricao') {
+                                    $btn_classe .= ' disabled';
+                                    $btn_attrs   = ' id="btnInscricao" aria-disabled="true" tabindex="-1"';
+                                }
+
                                 if($pega_target == 'sim') :
                                 $target = '_blank'; ?>
 
-                                <a href="<?php the_field('url_para_inscricao'); ?>" class="btn btn-primary" title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
+                                <a href="<?php the_field('url_para_inscricao'); ?>" class="<?php echo $btn_classe; ?>"<?php echo $btn_attrs; ?> title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
 
                                 <?php else :
                                 $target = '_self';
                                 ?>
 
-                                <a href="<?php echo get_permalink('44'); ?>" class="btn btn-primary" title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
+                                <a href="<?php echo get_permalink('44'); ?>" class="<?php echo $btn_classe; ?>"<?php echo $btn_attrs; ?> title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
 
                                 <?php
                                 endif;
                                 ?>
 
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
