@@ -97,9 +97,13 @@
                     </div>
 
                     <div class="col-xl-3 offset-xl-1">
+                        <?php $lead_modo = get_field('lead_modo_formulario'); ?>
                         <div class="shadow-lg">
 
+                            <?php // sem turma prevista (lista de espera), o título "Investimento" não é exibido ?>
+                            <?php if ($lead_modo !== 'espera') : ?>
                             <h2 class="bg-secondary h5 mb-0 p-3 text-center text-white">Investimento</h2>
+                            <?php endif; ?>
 
                             <?php if(get_field('valor_do_curso')): ?>
                             <div class="bg-primary border-bottom small text-center text-white"><p>de: R$ <span class="fs-4 fw-bold" style="text-decoration: line-through;"><?php the_field('valor_do_curso'); ?></span> mensais</p></div>
@@ -122,8 +126,7 @@
                             <?php endif; ?>
 
                             <?php
-                            $lead_modo     = get_field('lead_modo_formulario');
-                            $lead_ativo    = in_array($lead_modo, array('inscricao', 'espera'), true);
+                            $lead_ativo   = in_array($lead_modo, array('inscricao', 'espera'), true);
                             $lead_material = get_field('lead_material_download');
 
                             if ($lead_ativo) {
