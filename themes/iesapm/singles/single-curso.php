@@ -129,8 +129,21 @@
                             $lead_ativo   = in_array($lead_modo, array('inscricao', 'espera'), true);
                             $lead_material = get_field('lead_material_download');
 
+                            // link de inscrição (externo ou página interna), usado pelo botão do formulário
+                            $pega_target   = get_field('a_inscricao_e_uma_pagina_externa');
+                            $url_inscricao = $pega_target == 'sim' ? get_field('url_para_inscricao') : '';
+                            $target        = $pega_target == 'sim' ? '_blank' : '_self';
+                            if (empty($url_inscricao)) {
+                                $url_inscricao = get_permalink('44');
+                                $target        = '_self';
+                            }
+
                             if ($lead_ativo) {
-                                get_template_part('template-parts/form-lead-curso', null, array('modo' => $lead_modo));
+                                get_template_part('template-parts/form-lead-curso', null, array(
+                                    'modo'   => $lead_modo,
+                                    'url'    => $url_inscricao,
+                                    'target' => $target,
+                                ));
                             }
                             ?>
 
@@ -140,35 +153,9 @@
                             </div>
                             <?php endif; ?>
 
-                            <?php if ($lead_modo !== 'espera') : ?>
+                            <?php if (!$lead_ativo) : ?>
                             <div class="d-flex justify-content-center py-3">
-                                <?php
-                                // verifica se o link é uma página externa
-                                $pega_target = get_field('a_inscricao_e_uma_pagina_externa');
-
-                                // com formulário ativo, o botão começa bloqueado até o envio
-                                $btn_classe = 'btn btn-primary';
-                                $btn_attrs  = '';
-                                if ($lead_modo === 'inscricao') {
-                                    $btn_classe .= ' disabled';
-                                    $btn_attrs   = ' id="btnInscricao" aria-disabled="true" tabindex="-1"';
-                                }
-
-                                if($pega_target == 'sim') :
-                                $target = '_blank'; ?>
-
-                                <a href="<?php the_field('url_para_inscricao'); ?>" class="<?php echo $btn_classe; ?>"<?php echo $btn_attrs; ?> title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
-
-                                <?php else :
-                                $target = '_self';
-                                ?>
-
-                                <a href="<?php echo get_permalink('44'); ?>" class="<?php echo $btn_classe; ?>"<?php echo $btn_attrs; ?> title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
-
-                                <?php
-                                endif;
-                                ?>
-
+                                <a href="<?php echo esc_url($url_inscricao); ?>" class="btn btn-primary" title="Inscreva-se" target="<?php echo $target; ?>">Inscreva-se</a>
                             </div>
                             <?php endif; ?>
                         </div>

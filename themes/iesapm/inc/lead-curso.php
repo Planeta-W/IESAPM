@@ -186,7 +186,7 @@ function lead_curso_handler() {
 	if ( $espera ) {
 		$intro_interessado = 'Registramos seu interesse no curso <strong>' . esc_html( $titulo_curso ) . '</strong>. Assim que houver novas turmas, entraremos em contato com você.';
 	} else {
-		$intro_interessado = 'Recebemos seus dados para o curso <strong>' . esc_html( $titulo_curso ) . '</strong>. Você já pode concluir a sua inscrição pelo site.';
+		$intro_interessado = 'Recebemos seus dados para o curso <strong>' . esc_html( $titulo_curso ) . '</strong>. Se ainda não concluiu a sua inscrição, acesse a página do curso pelo botão abaixo.';
 	}
 	if ( $material_url ) {
 		$intro_interessado .= '<br><br>Como cortesia, aqui está o material complementar do curso: <a href="' . esc_url( $material_url ) . '">baixar material</a>.';
@@ -295,7 +295,7 @@ function lead_curso_handler() {
 
 	$mensagem = $espera
 		? 'Cadastro realizado! Avisaremos você quando houver novas turmas.'
-		: 'Dados enviados com sucesso! Sua inscrição foi liberada.';
+		: 'Dados enviados com sucesso! Abrindo a página de inscrição...';
 
 	if ( $material_url ) {
 		$mensagem .= ' O material complementar está disponível para download abaixo e também foi enviado para o seu e-mail. Confira sua caixa de entrada (e o spam).';

@@ -7,11 +7,13 @@
 $modo = $args['modo'] ?? 'inscricao';
 require_once get_template_directory() . '/inc/env.php';
 
-$titulo = $modo === 'espera' ? 'Quero ser avisado das próximas turmas' : 'Preencha para liberar sua inscrição';
-$botao  = $modo === 'espera' ? 'Avise-me' : 'Liberar inscrição';
+$titulo = $modo === 'espera' ? 'Quero ser avisado das próximas turmas' : 'Preencha para se inscrever';
+$botao  = $modo === 'espera' ? 'Avise-me' : 'Inscreva-se';
+$url    = $args['url'] ?? '';
+$target = $args['target'] ?? '_self';
 ?>
 
-<form id="formLeadCurso" class="p-3 bg-light" data-modo="<?php echo esc_attr($modo); ?>" novalidate>
+<form id="formLeadCurso" class="p-3 bg-light" data-modo="<?php echo esc_attr($modo); ?>" data-url="<?php echo esc_url($url); ?>" data-target="<?php echo esc_attr($target); ?>" novalidate>
     <h3 class="h6 text-primary mb-3"><?php echo esc_html($titulo); ?></h3>
 
     <input type="hidden" name="action" value="lead_curso">
@@ -41,11 +43,11 @@ $botao  = $modo === 'espera' ? 'Avise-me' : 'Liberar inscrição';
         </label>
     </div>
 
-    <div class="cf-turnstile mb-3" data-sitekey="<?php echo esc_attr($_ENV['TURNSTILE_SITE_KEY'] ?? ''); ?>" data-language="pt-br"></div>
+    <div class="cf-turnstile mb-3" data-sitekey="<?php echo esc_attr($_ENV['TURNSTILE_SITE_KEY'] ?? ''); ?>" data-language="pt-br" data-callback="leadTurnstileOk" data-expired-callback="leadTurnstileExpirou" data-error-callback="leadTurnstileExpirou"></div>
 
     <div id="leadCursoMensagem" class="small mb-3" role="alert" aria-live="polite" hidden></div>
 
     <div class="d-grid">
-        <button type="submit" class="btn btn-primary"><?php echo esc_html($botao); ?></button>
+        <button type="submit" class="btn btn-primary"<?php echo $modo === 'inscricao' ? ' disabled' : ''; ?>><?php echo esc_html($botao); ?></button>
     </div>
 </form>
