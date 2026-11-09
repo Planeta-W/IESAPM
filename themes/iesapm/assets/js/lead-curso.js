@@ -24,8 +24,9 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
     var cadastrado = false; // dados já enviados (nesta visita ou em visita anterior)
     var enviando = false;
 
-    function mostrarMensagem(texto, tipo) {
+    function mostrarMensagem(texto, tipo, aviso) {
         msg.textContent = texto;
+        if (aviso) { msg.setAttribute('data-aviso', '1'); } else { msg.removeAttribute('data-aviso'); }
         msg.className = 'small mb-3 text-' + tipo;
         msg.hidden = false;
     }
@@ -34,18 +35,25 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
         return (form.elements[nome].value || '').trim();
     }
 
-    // Formulário completo e válido (nome, e-mail, celular, profissão, LGPD e Turnstile)
-    function formularioValido() {
-        var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor('email'));
-        var celularOk = celular.value.replace(/\D/g, '').length >= 10;
+    // Primeira pendência do formulário (nome, e-mail, celular, profissão, LGPD e Turnstile)
+    function primeiraPendencia() {
         var token = form.elements['cf-turnstile-response'];
-        return valor('nome') !== '' && emailOk && celularOk && valor('profissao') !== '' &&
-            form.elements['consentimento'].checked && !!(token && token.value);
+        if (valor('nome') === '') { return { campo: 'nome', texto: 'Preencha o seu nome para se inscrever.' }; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor('email'))) { return { campo: 'email', texto: 'Informe um e-mail válido para se inscrever.' }; }
+        if (celular.value.replace(/\D/g, '').length < 10) { return { campo: 'celular', texto: 'Informe o seu celular com DDD para se inscrever.' }; }
+        if (valor('profissao') === '') { return { campo: 'profissao', texto: 'Informe a sua profissão para se inscrever.' }; }
+        if (!form.elements['consentimento'].checked) { return { campo: 'consentimento', texto: 'Aceite a Política de Privacidade para se inscrever.' }; }
+        if (!(token && token.value)) { return { campo: null, texto: 'Confirme a verificação de segurança para se inscrever.' }; }
+        return null;
     }
 
+    // Botão "apagado" enquanto o formulário está incompleto, mas clicável: o clique mostra o que falta
     function atualizarBotao() {
         if (!inscricao || cadastrado || enviando) { return; }
-        botao.disabled = !formularioValido();
+        var valido = primeiraPendencia() === null;
+        botao.classList.toggle('opacity-50', !valido);
+        botao.setAttribute('aria-disabled', valido ? 'false' : 'true');
+        if (valido && msg.getAttribute('data-aviso')) { msg.hidden = true; }
     }
 
     // Callbacks do Turnstile (declarados no data-callback do widget)
@@ -82,6 +90,8 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
         form.querySelectorAll('input').forEach(function (el) { el.disabled = true; });
         form.querySelectorAll('.cf-turnstile').forEach(function (el) { el.hidden = true; });
         botao.disabled = !inscricao;
+        botao.classList.remove('opacity-50');
+        botao.setAttribute('aria-disabled', 'false');
         botao.textContent = inscricao ? textoBotao : 'Enviado';
         mostrarMensagem(texto, 'success');
         mostrarMaterial(material);
@@ -99,6 +109,7 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
         if (janela) { janela.close(); }
         enviando = false;
         mostrarMensagem(texto, 'danger');
+        botao.disabled = false;
         botao.textContent = textoBotao;
         if (window.turnstile) { window.turnstile.reset(); }
         atualizarBotao();
@@ -115,7 +126,14 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
         }
 
         if (enviando) { return; }
-        if (inscricao && !formularioValido()) { return; }
+        if (inscricao) {
+            var pendencia = primeiraPendencia();
+            if (pendencia) {
+                mostrarMensagem(pendencia.texto, 'danger', true);
+                if (pendencia.campo) { form.elements[pendencia.campo].focus(); }
+                return;
+            }
+        }
 
         msg.hidden = true;
         enviando = true;

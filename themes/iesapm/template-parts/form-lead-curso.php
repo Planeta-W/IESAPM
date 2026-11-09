@@ -48,6 +48,6 @@ $target = $args['target'] ?? '_self';
     <div id="leadCursoMensagem" class="small mb-3" role="alert" aria-live="polite" hidden></div>
 
     <div class="d-grid">
-        <button type="submit" class="btn btn-primary"<?php echo $modo === 'inscricao' ? ' disabled' : ''; ?>><?php echo esc_html($botao); ?></button>
+        <button type="submit" class="btn btn-primary<?php echo $modo === 'inscricao' ? ' opacity-50' : ''; ?>"<?php echo $modo === 'inscricao' ? ' aria-disabled="true"' : ''; ?>><?php echo esc_html($botao); ?></button>
     </div>
 </form>
