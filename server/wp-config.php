@@ -2,6 +2,10 @@
 
 define( 'WP_ENVIRONMENT_TYPE', 'local' );
 
+// Dev: desliga a otimização do LiteSpeed Cache (JS delayed/deferred quebra o jQuery).
+// Não grava nada no banco, então não afeta a produção.
+define( 'LITESPEED_DISABLE_ALL', true );
+
 // Variáveis do .env chegam como variáveis de ambiente (env_file do docker-compose.yml)
 function env( $name, $default = '' ) {
     $value = getenv( $name );
