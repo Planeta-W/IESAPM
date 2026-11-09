@@ -143,6 +143,7 @@
                                     'modo'   => $lead_modo,
                                     'url'    => $url_inscricao,
                                     'target' => $target,
+                                    'material' => !empty($lead_material['url']),
                                 ));
                             }
                             ?>

@@ -11,10 +11,19 @@ $titulo = $modo === 'espera' ? 'Quero ser avisado das próximas turmas' : 'Preen
 $botao  = $modo === 'espera' ? 'Avise-me' : 'Inscreva-se';
 $url    = $args['url'] ?? '';
 $target = $args['target'] ?? '_self';
+$tem_material = !empty($args['material']);
 ?>
 
 <form id="formLeadCurso" class="p-3 bg-light" data-modo="<?php echo esc_attr($modo); ?>" data-url="<?php echo esc_url($url); ?>" data-target="<?php echo esc_attr($target); ?>" novalidate>
     <h3 class="h6 text-primary mb-3"><?php echo esc_html($titulo); ?></h3>
+
+    <?php if ($tem_material) : ?>
+    <div id="leadMaterialAviso" class="bg-white border border-secondary rounded small p-2 mb-3 d-flex align-items-start">
+        <i class="fa-solid fa-gift text-secondary fs-5 me-2 mt-1" aria-hidden="true"></i>
+        <span><strong class="text-primary">Material complementar gratuito!</strong>
+            <?php echo $modo === 'espera' ? 'Cadastre-se e receba' : 'Inscreva-se e receba'; ?> no seu e-mail um material exclusivo deste curso.</span>
+    </div>
+    <?php endif; ?>
 
     <input type="hidden" name="action" value="lead_curso">
     <input type="hidden" name="curso_id" value="<?php echo esc_attr(get_the_ID()); ?>">

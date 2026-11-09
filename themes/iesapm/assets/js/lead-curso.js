@@ -20,6 +20,7 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
     var cursoId = form.querySelector('[name="curso_id"]').value;
     var chave = 'leadCurso_' + cursoId;
     var areaMaterial = document.getElementById('leadMaterial');
+    var avisoMaterial = document.getElementById('leadMaterialAviso');
     var textoBotao = botao.textContent;
     var cadastrado = false; // dados já enviados (nesta visita ou em visita anterior)
     var enviando = false;
@@ -95,6 +96,7 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
         botao.textContent = inscricao ? textoBotao : 'Enviado';
         mostrarMensagem(texto, 'success');
         mostrarMaterial(material);
+        if (avisoMaterial) { avisoMaterial.hidden = true; }
     }
 
     // Visitante que já preencheu: não pede de novo
