@@ -100,10 +100,9 @@
                         <?php $lead_modo = get_field('lead_modo_formulario'); ?>
                         <div class="shadow-lg">
 
-                            <?php // sem turma prevista (lista de espera), o título "Investimento" não é exibido ?>
+                            <?php // sem turma prevista (lista de espera), o bloco de investimento (título, valores e texto) não é exibido ?>
                             <?php if ($lead_modo !== 'espera') : ?>
                             <h2 class="bg-secondary h5 mb-0 p-3 text-center text-white">Investimento</h2>
-                            <?php endif; ?>
 
                             <?php if(get_field('valor_do_curso')): ?>
                             <div class="bg-primary border-bottom small text-center text-white"><p>de: R$ <span class="fs-4 fw-bold" style="text-decoration: line-through;"><?php the_field('valor_do_curso'); ?></span> mensais</p></div>
@@ -124,6 +123,7 @@
                                 <?php the_field('bloco_de_texto'); ?>
                             </div>
                             <?php endif; ?>
+                            <?php endif; // fim do bloco de investimento ?>
 
                             <?php
                             $lead_ativo   = in_array($lead_modo, array('inscricao', 'espera'), true);
