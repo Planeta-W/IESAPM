@@ -160,8 +160,10 @@ function lead_curso_handler() {
 	}
 
 	$titulo_curso = get_the_title( $curso );
+	$link_curso   = get_permalink( $curso );
 	$material     = get_field( 'lead_material_download', $curso_id );
 	$material_url = is_array( $material ) && ! empty( $material['url'] ) ? $material['url'] : '';
+	$espera       = $modo === 'espera';
 
 	$lead = array(
 		'nome'      => $nome,
@@ -172,68 +174,126 @@ function lead_curso_handler() {
 		'modo'      => $modo,
 	);
 
-	$campos = array(
+	/* ---------- E-mail 1: confirmação para o interessado ---------- */
+	$campos_interessado = array(
+		array( 'label' => 'Curso', 'valor' => $titulo_curso ),
 		array( 'label' => 'Nome', 'valor' => $nome ),
 		array( 'label' => 'E-mail', 'valor' => $email ),
 		array( 'label' => 'Celular', 'valor' => $celular ),
 		array( 'label' => 'Profissão', 'valor' => $profissao ),
-		array( 'label' => 'Curso', 'valor' => $titulo_curso ),
-		array( 'label' => 'Interesse', 'valor' => $modo === 'espera' ? 'Aviso de novas turmas' : 'Inscrição' ),
 	);
+
+	if ( $espera ) {
+		$intro_interessado = 'Registramos seu interesse no curso <strong>' . esc_html( $titulo_curso ) . '</strong>. Assim que houver novas turmas, entraremos em contato com você.';
+	} else {
+		$intro_interessado = 'Recebemos seus dados para o curso <strong>' . esc_html( $titulo_curso ) . '</strong>. Você já pode concluir a sua inscrição pelo site.';
+	}
 	if ( $material_url ) {
-		$campos[] = array(
-			'label' => 'Material',
-			'valor' => '<a href="' . esc_url( $material_url ) . '">Baixar material</a>',
-			'html'  => true,
-		);
+		$intro_interessado .= '<br><br>Como cortesia, aqui está o material complementar do curso: <a href="' . esc_url( $material_url ) . '">baixar material</a>.';
 	}
 
-	$intro = $modo === 'espera'
-		? 'O <strong>IESAPM</strong> confirma o recebimento de seu interesse. Avisaremos você assim que houver novas turmas.'
-		: 'O <strong>IESAPM</strong> confirma o recebimento de suas informações. Você já pode seguir com a sua inscrição no site.';
+	$opcoes_interessado = array();
+	if ( ! $espera ) {
+		$opcoes_interessado['botao'] = array( 'texto' => 'Ir para a página do curso', 'url' => $link_curso );
+	}
 
-	$corpo = gerarEmailHTML( 'Interesse recebido', $nome, $intro, $campos );
+	$corpo_interessado = gerarEmailHTML(
+		$espera ? 'Interesse recebido' : 'Inscrição liberada',
+		$nome,
+		$intro_interessado,
+		$campos_interessado,
+		$opcoes_interessado
+	);
+
+	/* ---------- E-mail 2: aviso de novo lead para a equipe ---------- */
+	$campos_equipe = array(
+		array( 'label' => 'Tipo', 'valor' => $espera ? 'Lista de espera (novas turmas)' : 'Inscrição' ),
+		array( 'label' => 'Curso', 'valor' => $titulo_curso ),
+		array( 'label' => 'Nome', 'valor' => $nome ),
+		array( 'label' => 'E-mail', 'valor' => $email ),
+		array( 'label' => 'Celular', 'valor' => $celular ),
+		array( 'label' => 'Profissão', 'valor' => $profissao ),
+		array( 'label' => 'Recebido em', 'valor' => wp_date( 'd/m/Y H:i' ) ),
+		array(
+			'label' => 'Página',
+			'valor' => '<a href="' . esc_url( $link_curso ) . '">' . esc_html( $link_curso ) . '</a>',
+			'html'  => true,
+		),
+	);
+	if ( $material_url ) {
+		$campos_equipe[] = array( 'label' => 'Material', 'valor' => 'Link enviado ao interessado' );
+	}
+
+	$corpo_equipe = gerarEmailHTML(
+		$espera ? 'Novo lead - lista de espera' : 'Novo lead - inscrição',
+		$nome,
+		'Um novo interessado preencheu o formulário do curso <strong>' . esc_html( $titulo_curso ) . '</strong> no site. Responda este e-mail para falar diretamente com ele.',
+		$campos_equipe,
+		array(
+			'saudacao'     => 'Novo lead pelo site',
+			'titulo_dados' => 'Dados do lead',
+			'assinatura'   => false,
+			'rodape'       => 'Aviso automático do formulário de cursos do site.',
+		)
+	);
 
 	// O WordPress já traz o PHPMailer (carregar o de lib/ causaria redeclaração de classe)
 	require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
 	require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
 	require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 
-	$mail = new PHPMailer\PHPMailer\PHPMailer( true );
+	// Cria e envia um e-mail; $montar recebe o PHPMailer já com SMTP e remetente configurados
+	$enviar = function ( $montar ) {
+		$mail = new PHPMailer\PHPMailer\PHPMailer( true );
+		try {
+			$mail->isSMTP();
+			$mail->Host       = $_ENV['EMAIL_HOST'];
+			$mail->Port       = (int) ( $_ENV['EMAIL_PORT'] ?? 587 );
+			$mail->SMTPAuth   = ! empty( $_ENV['EMAIL_PASS'] );
+			$mail->Username   = $_ENV['EMAIL_USER'];
+			$mail->Password   = $_ENV['EMAIL_PASS'] ?? '';
+			$mail->SMTPSecure = $_ENV['EMAIL_SMTP'] ?? 'tls';
+			if ( ( $_ENV['EMAIL_SMTP'] ?? '' ) === '' ) {
+				$mail->SMTPAutoTLS = false;
+			}
+			$mail->CharSet = 'UTF-8';
+			$mail->setFrom( ! empty( $_ENV['EMAIL_FROM'] ) ? $_ENV['EMAIL_FROM'] : $_ENV['EMAIL_USER'], 'IESAPM' );
+			$mail->isHTML( true );
 
-	try {
-		$mail->isSMTP();
-		$mail->Host       = $_ENV['EMAIL_HOST'];
-		$mail->Port       = (int) ( $_ENV['EMAIL_PORT'] ?? 587 );
-		$mail->SMTPAuth   = ! empty( $_ENV['EMAIL_PASS'] );
-		$mail->Username   = $_ENV['EMAIL_USER'];
-		$mail->Password   = $_ENV['EMAIL_PASS'] ?? '';
-		$mail->SMTPSecure = $_ENV['EMAIL_SMTP'] ?? 'tls';
-		if ( ( $_ENV['EMAIL_SMTP'] ?? '' ) === '' ) {
-			$mail->SMTPAutoTLS = false;
+			$montar( $mail );
+			$mail->send();
+			return true;
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			error_log( '[lead-curso] Falha no envio: ' . $mail->ErrorInfo );
+			return false;
 		}
-		$mail->CharSet = 'UTF-8';
+	};
 
-		$mail->setFrom( ! empty( $_ENV['EMAIL_FROM'] ) ? $_ENV['EMAIL_FROM'] : $_ENV['EMAIL_USER'], 'IESAPM' );
+	$ok_interessado = $enviar( function ( $mail ) use ( $email, $nome, $espera, $titulo_curso, $corpo_interessado ) {
 		$mail->addAddress( $email, $nome );
-		foreach ( $destinos as $destino ) {
-			$mail->addBCC( $destino );
-		}
-
-		$mail->isHTML( true );
-		$mail->Subject = ( $modo === 'espera' ? 'Interesse em novas turmas' : 'Interesse em inscrição' ) . ' - ' . $titulo_curso;
-		$mail->Body    = $corpo;
+		$mail->Subject = ( $espera ? 'Recebemos seu interesse' : 'Sua inscrição' ) . ' - ' . $titulo_curso;
+		$mail->Body    = $corpo_interessado;
 		$mail->AltBody = 'O IESAPM recebeu suas informações sobre o curso ' . $titulo_curso . '.';
+	} );
 
-		$mail->send();
-	} catch ( PHPMailer\PHPMailer\Exception $e ) {
-		error_log( '[lead-curso] Falha no envio: ' . $mail->ErrorInfo );
+	$ok_equipe = $enviar( function ( $mail ) use ( $destinos, $email, $nome, $celular, $espera, $titulo_curso, $corpo_equipe ) {
+		foreach ( $destinos as $destino ) {
+			$mail->addAddress( $destino );
+		}
+		$mail->addReplyTo( $email, $nome );
+		$mail->Subject = '[Lead] ' . ( $espera ? 'Lista de espera' : 'Inscrição' ) . ' - ' . $titulo_curso . ' - ' . $nome;
+		$mail->Body    = $corpo_equipe;
+		$mail->AltBody = 'Novo lead: ' . $nome . ' (' . $email . ', ' . $celular . ') - ' . $titulo_curso . '.';
+	} );
+
+	// Só falha para o visitante se nenhum dos dois e-mails saiu; um deles já basta para não perder o lead
+	if ( ! $ok_interessado && ! $ok_equipe ) {
 		lead_curso_responder( false, 'Não foi possível enviar seus dados. Tente novamente mais tarde.' );
 	}
 
 	lead_curso_enviar_rd( $lead );
 
-	lead_curso_responder( true, $modo === 'espera'
+	lead_curso_responder( true, $espera
 		? 'Cadastro realizado! Avisaremos você quando houver novas turmas.'
 		: 'Dados enviados com sucesso! Sua inscrição foi liberada.', array(
 		'material' => $material_url,
