@@ -87,7 +87,9 @@
 
 <?php wp_footer(); ?>
 
-<script type="text/javascript" async src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/447d04a9-bdba-421a-930e-e8ea85741a7a-loader.js" ></script>
+<!-- <script type="text/javascript" async src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/447d04a9-bdba-421a-930e-e8ea85741a7a-loader.js" ></script> -->
+
+<script type="text/javascript" async src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/6c990565-2071-44f9-b366-0b67f913d8a8-loader.js" ></script>
 
 </body>
 </html>

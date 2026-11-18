@@ -93,10 +93,66 @@ add_action( 'wp_enqueue_scripts', 'lead_curso_enqueue' );
 
 
 /*--------------------------------------------------------------
-INTEGRAÇÃO RD STATION (etapa futura)
+INTEGRAÇÃO RD STATION (API de Conversões)
 --------------------------------------------------------------*/
 function lead_curso_enviar_rd( $lead ) {
-	// TODO: enviar $lead (nome, email, celular, profissao, curso, modo) à RD Station.
+
+	$api_key = $_ENV['RDSTATION_API_KEY'] ?? '';
+	if ( $api_key === '' ) {
+		error_log( '[lead-curso] RDSTATION_API_KEY ausente no .env' );
+		return false;
+	}
+
+	$espera = $lead['modo'] === 'espera';
+
+	$payload = array(
+		'conversion_identifier' => $espera ? 'iesapm-lista-espera' : 'iesapm-inscricao',
+		'name'                  => $lead['nome'],
+		'email'                 => $lead['email'],
+		'mobile_phone'          => $lead['celular'],
+		'job_title'             => $lead['profissao'],
+		'cf_curso'              => $lead['curso'],
+		'cf_tipo_lead'          => $espera ? 'Lista de espera' : 'Inscrição',
+		'tags'                  => array( 'iesapm' ),
+		'available_for_mailing' => true,
+		'legal_bases'           => array(
+			array(
+				'category' => 'communications',
+				'type'     => 'consent',
+				'status'   => 'granted',
+			),
+		),
+	);
+
+	// Liga a conversão ao histórico de navegação do script da RD no footer
+	if ( ! empty( $_COOKIE['__trf_src'] ) ) {
+		$payload['traffic_source'] = sanitize_text_field( wp_unslash( $_COOKIE['__trf_src'] ) );
+	}
+
+	$resposta = wp_remote_post(
+		'https://api.rd.services/platform/conversions?api_key=' . rawurlencode( $api_key ),
+		array(
+			'timeout' => 10,
+			'headers' => array( 'Content-Type' => 'application/json' ),
+			'body'    => wp_json_encode( array(
+				'event_type'   => 'CONVERSION',
+				'event_family' => 'CDP',
+				'payload'      => $payload,
+			) ),
+		)
+	);
+
+	if ( is_wp_error( $resposta ) ) {
+		error_log( '[lead-curso] RD Station: ' . $resposta->get_error_message() );
+		return false;
+	}
+
+	$codigo = wp_remote_retrieve_response_code( $resposta );
+	if ( $codigo < 200 || $codigo >= 300 ) {
+		error_log( '[lead-curso] RD Station HTTP ' . $codigo . ': ' . wp_remote_retrieve_body( $resposta ) );
+		return false;
+	}
+
 	return true;
 }
 
