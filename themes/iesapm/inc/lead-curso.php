@@ -113,7 +113,7 @@ function lead_curso_enviar_rd( $lead ) {
 		'job_title'             => $lead['profissao'],
 		'cf_curso'              => $lead['curso'],
 		'cf_tipo_lead'          => $espera ? 'Lista de espera' : 'Inscrição',
-		'tags'                  => array( 'iesapm' ),
+		'tags'                  => array( 'site-iesapm-cursos' ),
 		'available_for_mailing' => true,
 		'legal_bases'           => array(
 			array(
