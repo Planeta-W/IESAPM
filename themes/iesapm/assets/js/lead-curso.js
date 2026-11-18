@@ -17,12 +17,10 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
     var msg = document.getElementById('leadCursoMensagem');
     var botao = form.querySelector('button[type="submit"]');
     var celular = document.getElementById('lead-celular');
-    var cursoId = form.querySelector('[name="curso_id"]').value;
-    var chave = 'leadCurso_' + cursoId;
     var areaMaterial = document.getElementById('leadMaterial');
     var avisoMaterial = document.getElementById('leadMaterialAviso');
     var textoBotao = botao.textContent;
-    var cadastrado = false; // dados já enviados (nesta visita ou em visita anterior)
+    var cadastrado = false; // dados já enviados nesta visita
     var enviando = false;
 
     function mostrarMensagem(texto, tipo, aviso) {
@@ -99,14 +97,6 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
         if (avisoMaterial) { avisoMaterial.hidden = true; }
     }
 
-    // Visitante que já preencheu: não pede de novo
-    try {
-        var salvo = JSON.parse(localStorage.getItem(chave));
-        if (salvo && salvo.texto) {
-            concluir(inscricao ? 'Seus dados já foram enviados. Clique em Inscreva-se para continuar.' : salvo.texto, salvo.material);
-        }
-    } catch (e) { /* localStorage indisponível */ }
-
     function falha(texto, janela) {
         if (janela) { janela.close(); }
         enviando = false;
@@ -156,7 +146,6 @@ modo "inscricao": o botão "Inscreva-se" só ativa com o formulário válido;
                     return;
                 }
 
-                try { localStorage.setItem(chave, JSON.stringify({ texto: res.message, material: res.material })); } catch (e) { }
                 enviando = false;
                 concluir(res.message, res.material);
 
